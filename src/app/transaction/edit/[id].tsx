@@ -1,12 +1,15 @@
-import { router, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator } from 'react-native';
+import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator } from "react-native";
 
-import { Screen } from '@/components/screen';
-import { useTransaction, useUpdateTransaction } from '@/features/transactions/hooks';
+import { Screen } from "@/components/screen";
+import {
+  useTransaction,
+  useUpdateTransaction,
+} from "@/features/transactions/hooks";
 import {
   TransactionForm,
   type TransactionFormValues,
-} from '@/features/transactions/transaction-form';
+} from "@/features/transactions/transaction-form";
 
 export default function EditTransactionScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -23,7 +26,10 @@ export default function EditTransactionScreen() {
   }
 
   function handleSubmit(values: TransactionFormValues) {
-    mutate({ id: transactionId, input: values }, { onSuccess: () => router.back() });
+    mutate(
+      { id: transactionId, input: values },
+      { onSuccess: () => router.back() }
+    );
   }
 
   return (
@@ -33,7 +39,7 @@ export default function EditTransactionScreen() {
         pricePerUnit: String(transaction.pricePerUnit),
         quantity: String(transaction.quantity),
         date: transaction.date,
-        note: transaction.note ?? '',
+        note: transaction.note ?? "",
       }}
       submitLabel="Save Changes"
       submitting={saving}

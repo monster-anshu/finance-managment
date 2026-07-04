@@ -1,18 +1,21 @@
-import { useState } from 'react';
-import { Button, StyleSheet } from 'react-native';
+import { useState } from "react";
+import { Button, StyleSheet } from "react-native";
 
-import { LabeledField } from '@/components/labeled-field';
-import { OptionPicker } from '@/components/option-picker';
-import { Screen } from '@/components/screen';
-import { ASSET_TYPES, ASSET_TYPE_LABELS, type AssetType } from '@/lib/types';
+import { LabeledField } from "@/components/labeled-field";
+import { OptionPicker } from "@/components/option-picker";
+import { Screen } from "@/components/screen";
+import { ASSET_TYPES, ASSET_TYPE_LABELS, type AssetType } from "@/lib/types";
 import {
   isValid,
   validateInstrument,
   type Errors,
   type InstrumentInput,
-} from '@/lib/validation';
+} from "@/lib/validation";
 
-const typeOptions = ASSET_TYPES.map((value) => ({ value, label: ASSET_TYPE_LABELS[value] }));
+const typeOptions = ASSET_TYPES.map((value) => ({
+  value,
+  label: ASSET_TYPE_LABELS[value],
+}));
 
 export interface InstrumentFormValues {
   name: string;
@@ -27,9 +30,14 @@ interface Props {
   onSubmit: (values: InstrumentFormValues) => void;
 }
 
-export function InstrumentForm({ initial, submitLabel, submitting, onSubmit }: Props) {
+export function InstrumentForm({
+  initial,
+  submitLabel,
+  submitting,
+  onSubmit,
+}: Props) {
   const [input, setInput] = useState<InstrumentInput>(
-    initial ?? { name: '', type: '', description: '' },
+    initial ?? { name: "", type: "", description: "" }
   );
   const [errors, setErrors] = useState<Errors<InstrumentInput>>({});
 
@@ -37,7 +45,11 @@ export function InstrumentForm({ initial, submitLabel, submitting, onSubmit }: P
     const nextErrors = validateInstrument(input);
     setErrors(nextErrors);
     if (!isValid(nextErrors)) return;
-    onSubmit({ name: input.name.trim(), type: input.type as AssetType, description: input.description.trim() });
+    onSubmit({
+      name: input.name.trim(),
+      type: input.type as AssetType,
+      description: input.description.trim(),
+    });
   }
 
   return (
@@ -64,11 +76,15 @@ export function InstrumentForm({ initial, submitLabel, submitting, onSubmit }: P
         multiline
         style={styles.multiline}
       />
-      <Button title={submitLabel} onPress={handleSubmit} disabled={submitting} />
+      <Button
+        title={submitLabel}
+        onPress={handleSubmit}
+        disabled={submitting}
+      />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  multiline: { minHeight: 80, textAlignVertical: 'top' },
+  multiline: { minHeight: 80, textAlignVertical: "top" },
 });

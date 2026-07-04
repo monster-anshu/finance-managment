@@ -1,7 +1,7 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
 
 export function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -16,9 +16,9 @@ export function Stat({ label, value }: { label: string; value: string }) {
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     gap: Spacing.two,
   },
 });

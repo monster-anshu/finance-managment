@@ -1,19 +1,30 @@
-import { eq } from 'drizzle-orm';
+import { eq } from "drizzle-orm";
 
-import { db } from '@/db/client';
-import { instruments, transactions, type Instrument, type NewInstrument } from '@/db/schema';
+import { db } from "@/db/client";
+import {
+  instruments,
+  transactions,
+  type Instrument,
+  type NewInstrument,
+} from "@/db/schema";
 
 export function listInstruments(): Promise<Instrument[]> {
   return db.select().from(instruments);
 }
 
-export async function getInstrument(id: number): Promise<Instrument | undefined> {
-  const rows = await db.select().from(instruments).where(eq(instruments.id, id)).limit(1);
+export async function getInstrument(
+  id: number
+): Promise<Instrument | undefined> {
+  const rows = await db
+    .select()
+    .from(instruments)
+    .where(eq(instruments.id, id))
+    .limit(1);
   return rows[0];
 }
 
 export async function createInstrument(
-  input: Omit<NewInstrument, 'id' | 'createdAt' | 'updatedAt'>,
+  input: Omit<NewInstrument, "id" | "createdAt" | "updatedAt">
 ): Promise<Instrument> {
   const now = Date.now();
   const [row] = await db
@@ -25,7 +36,7 @@ export async function createInstrument(
 
 export async function updateInstrument(
   id: number,
-  input: Partial<Omit<NewInstrument, 'id' | 'createdAt' | 'updatedAt'>>,
+  input: Partial<Omit<NewInstrument, "id" | "createdAt" | "updatedAt">>
 ): Promise<Instrument> {
   const [row] = await db
     .update(instruments)

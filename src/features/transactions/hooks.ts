@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   createTransaction,
@@ -7,14 +7,17 @@ import {
   listAllTransactions,
   listTransactionsByInstrument,
   updateTransaction,
-} from '@/db/repositories/transactions';
-import type { NewTransaction, Transaction } from '@/db/schema';
-import { queryKeys } from '@/lib/query';
+} from "@/db/repositories/transactions";
+import type { NewTransaction, Transaction } from "@/db/schema";
+import { queryKeys } from "@/lib/query";
 
-type TransactionFields = Omit<NewTransaction, 'id' | 'createdAt' | 'updatedAt'>;
+type TransactionFields = Omit<NewTransaction, "id" | "createdAt" | "updatedAt">;
 
 export function useAllTransactions() {
-  return useQuery({ queryKey: queryKeys.allTransactions, queryFn: listAllTransactions });
+  return useQuery({
+    queryKey: queryKeys.allTransactions,
+    queryFn: listAllTransactions,
+  });
 }
 
 export function useTransactionsByInstrument(instrumentId: number) {
@@ -26,14 +29,14 @@ export function useTransactionsByInstrument(instrumentId: number) {
 
 export function useTransaction(id: number) {
   return useQuery({
-    queryKey: ['transaction', id],
+    queryKey: ["transaction", id],
     queryFn: () => getTransaction(id),
   });
 }
 
 function invalidateForInstrument(
   qc: ReturnType<typeof useQueryClient>,
-  instrumentId: number,
+  instrumentId: number
 ): void {
   qc.invalidateQueries({ queryKey: queryKeys.transactions(instrumentId) });
   qc.invalidateQueries({ queryKey: queryKeys.allTransactions });
@@ -46,23 +49,32 @@ export function useCreateTransaction() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: TransactionFields) => createTransaction(input),
-    onSuccess: (row: Transaction) => invalidateForInstrument(qc, row.instrumentId),
+    onSuccess: (row: Transaction) =>
+      invalidateForInstrument(qc, row.instrumentId),
   });
 }
 
 export function useUpdateTransaction() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, input }: { id: number; input: Partial<TransactionFields> }) =>
-      updateTransaction(id, input),
-    onSuccess: (row: Transaction) => invalidateForInstrument(qc, row.instrumentId),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: number;
+      input: Partial<TransactionFields>;
+    }) => updateTransaction(id, input),
+    onSuccess: (row: Transaction) =>
+      invalidateForInstrument(qc, row.instrumentId),
   });
 }
 
 export function useDeleteTransaction() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id }: { id: number; instrumentId: number }) => deleteTransaction(id),
-    onSuccess: (_data, variables) => invalidateForInstrument(qc, variables.instrumentId),
+    mutationFn: ({ id }: { id: number; instrumentId: number }) =>
+      deleteTransaction(id),
+    onSuccess: (_data, variables) =>
+      invalidateForInstrument(qc, variables.instrumentId),
   });
 }

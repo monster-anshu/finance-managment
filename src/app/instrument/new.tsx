@@ -1,7 +1,10 @@
-import { router } from 'expo-router';
+import { router } from "expo-router";
 
-import { InstrumentForm, type InstrumentFormValues } from '@/features/instruments/instrument-form';
-import { useCreateInstrument } from '@/features/instruments/hooks';
+import { useCreateInstrument } from "@/features/instruments/hooks";
+import {
+  InstrumentForm,
+  type InstrumentFormValues,
+} from "@/features/instruments/instrument-form";
 
 export default function NewInstrumentScreen() {
   const { mutate, isPending } = useCreateInstrument();
@@ -10,5 +13,11 @@ export default function NewInstrumentScreen() {
     mutate(values, { onSuccess: () => router.back() });
   }
 
-  return <InstrumentForm submitLabel="Add Instrument" submitting={isPending} onSubmit={handleSubmit} />;
+  return (
+    <InstrumentForm
+      submitLabel="Add Instrument"
+      submitting={isPending}
+      onSubmit={handleSubmit}
+    />
+  );
 }

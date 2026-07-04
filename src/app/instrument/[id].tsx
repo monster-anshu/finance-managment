@@ -1,18 +1,30 @@
-import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, Button, Pressable, StyleSheet, View } from 'react-native';
+import { router, Stack, useLocalSearchParams } from "expo-router";
+import {
+  ActivityIndicator,
+  Button,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 
-import { Card } from '@/components/card';
-import { confirmDestructive } from '@/components/confirm';
-import { EmptyState } from '@/components/empty-state';
-import { Screen } from '@/components/screen';
-import { Stat } from '@/components/stat';
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { useDeleteInstrument, useInstrument } from '@/features/instruments/hooks';
-import { useDeleteTransaction, useTransactionsByInstrument } from '@/features/transactions/hooks';
-import { summarizeTransactions } from '@/lib/aggregation';
-import { formatDate, formatINR, formatQuantity } from '@/lib/format';
-import { ASSET_TYPE_LABELS, TX_KIND_LABELS } from '@/lib/types';
+import { Card } from "@/components/card";
+import { confirmDestructive } from "@/components/confirm";
+import { EmptyState } from "@/components/empty-state";
+import { Screen } from "@/components/screen";
+import { Stat } from "@/components/stat";
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import {
+  useDeleteInstrument,
+  useInstrument,
+} from "@/features/instruments/hooks";
+import {
+  useDeleteTransaction,
+  useTransactionsByInstrument,
+} from "@/features/transactions/hooks";
+import { summarizeTransactions } from "@/lib/aggregation";
+import { formatDate, formatINR, formatQuantity } from "@/lib/format";
+import { ASSET_TYPE_LABELS, TX_KIND_LABELS } from "@/lib/types";
 
 export default function InstrumentDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -36,8 +48,11 @@ export default function InstrumentDetailScreen() {
 
   function handleDeleteInstrument() {
     confirmDestructive(
-      'Deleting this instrument also deletes all its buys. This cannot be undone.',
-      () => deleteInstrument.mutate(instrumentId, { onSuccess: () => router.back() }),
+      "Deleting this instrument also deletes all its buys. This cannot be undone.",
+      () =>
+        deleteInstrument.mutate(instrumentId, {
+          onSuccess: () => router.back(),
+        })
     );
   }
 
@@ -54,13 +69,26 @@ export default function InstrumentDetailScreen() {
           <ThemedText type="small">{instrument.description}</ThemedText>
         ) : null}
         <View style={styles.stats}>
-          <Stat label="Total invested" value={formatINR(summary.totalInvested)} />
-          <Stat label="Total units" value={formatQuantity(summary.totalUnits)} />
+          <Stat
+            label="Total invested"
+            value={formatINR(summary.totalInvested)}
+          />
+          <Stat
+            label="Total units"
+            value={formatQuantity(summary.totalUnits)}
+          />
           <Stat label="Avg cost / unit" value={formatINR(summary.avgCost)} />
         </View>
         <View style={styles.actions}>
-          <Button title="Edit" onPress={() => router.push(`/instrument/edit/${instrumentId}`)} />
-          <Button title="Delete" color="#e5484d" onPress={handleDeleteInstrument} />
+          <Button
+            title="Edit"
+            onPress={() => router.push(`/instrument/edit/${instrumentId}`)}
+          />
+          <Button
+            title="Delete"
+            color="#e5484d"
+            onPress={handleDeleteInstrument}
+          />
         </View>
       </Card>
 
@@ -68,19 +96,31 @@ export default function InstrumentDetailScreen() {
         <ThemedText type="smallBold">Buys</ThemedText>
         <Button
           title="Add Buy"
-          onPress={() => router.push(`/transaction/new?instrumentId=${instrumentId}`)}
+          onPress={() =>
+            router.push(`/transaction/new?instrumentId=${instrumentId}`)
+          }
         />
       </View>
 
       {buys.length === 0 ? (
-        <EmptyState title="No buys yet" hint="Add your first lumpsum or SIP purchase." />
+        <EmptyState
+          title="No buys yet"
+          hint="Add your first lumpsum or SIP purchase."
+        />
       ) : (
         buys.map((buy) => (
-          <Pressable key={buy.id} onPress={() => router.push(`/transaction/edit/${buy.id}`)}>
+          <Pressable
+            key={buy.id}
+            onPress={() => router.push(`/transaction/edit/${buy.id}`)}
+          >
             <Card>
               <View style={styles.buyRow}>
-                <ThemedText type="smallBold">{TX_KIND_LABELS[buy.kind]}</ThemedText>
-                <ThemedText type="smallBold">{formatINR(buy.pricePerUnit * buy.quantity)}</ThemedText>
+                <ThemedText type="smallBold">
+                  {TX_KIND_LABELS[buy.kind]}
+                </ThemedText>
+                <ThemedText type="smallBold">
+                  {formatINR(buy.pricePerUnit * buy.quantity)}
+                </ThemedText>
               </View>
               <Stat label="Price / unit" value={formatINR(buy.pricePerUnit)} />
               <Stat label="Quantity" value={formatQuantity(buy.quantity)} />
@@ -94,8 +134,9 @@ export default function InstrumentDetailScreen() {
                 title="Delete buy"
                 color="#e5484d"
                 onPress={() =>
-                  confirmDestructive('Delete this buy? This cannot be undone.', () =>
-                    deleteTransaction.mutate({ id: buy.id, instrumentId }),
+                  confirmDestructive(
+                    "Delete this buy? This cannot be undone.",
+                    () => deleteTransaction.mutate({ id: buy.id, instrumentId })
                   )
                 }
               />
@@ -109,7 +150,15 @@ export default function InstrumentDetailScreen() {
 
 const styles = StyleSheet.create({
   stats: { gap: Spacing.one, marginTop: Spacing.two },
-  actions: { flexDirection: 'row', justifyContent: 'space-between', marginTop: Spacing.two },
-  buysHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  buyRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: Spacing.two,
+  },
+  buysHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  buyRow: { flexDirection: "row", justifyContent: "space-between" },
 });

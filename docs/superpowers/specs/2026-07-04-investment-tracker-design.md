@@ -12,23 +12,25 @@ and buy kind.
 
 ## Scope decisions (locked)
 
-| Decision | Choice | Rationale |
-|---|---|---|
-| Valuation | **Cost tracking only** | No current market value / gain-loss. No network, no market-data API. Pure ledger of what was invested. |
-| Storage | **Local device, expo-sqlite** | Personal, single-device. No login/backend. |
-| SIP recording | **Manual log per purchase** | No schedule engine. Each SIP buy is entered as one transaction tagged `sip`. |
-| Organization | **Grouped by instrument** | Two levels: an instrument holds many buy transactions. |
-| Currency | **INR (₹), single-currency** | Multi-currency deferred. |
-| DB access | **Drizzle ORM** over expo-sqlite | Typed schema, drizzle-kit migrations, best-maintained RN story. |
-| Async/state | **TanStack Query** | Caching + mutation state on top of Drizzle repositories. |
+| Decision      | Choice                           | Rationale                                                                                              |
+| ------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Valuation     | **Cost tracking only**           | No current market value / gain-loss. No network, no market-data API. Pure ledger of what was invested. |
+| Storage       | **Local device, expo-sqlite**    | Personal, single-device. No login/backend.                                                             |
+| SIP recording | **Manual log per purchase**      | No schedule engine. Each SIP buy is entered as one transaction tagged `sip`.                           |
+| Organization  | **Grouped by instrument**        | Two levels: an instrument holds many buy transactions.                                                 |
+| Currency      | **INR (₹), single-currency**     | Multi-currency deferred.                                                                               |
+| DB access     | **Drizzle ORM** over expo-sqlite | Typed schema, drizzle-kit migrations, best-maintained RN story.                                        |
+| Async/state   | **TanStack Query**               | Caching + mutation state on top of Drizzle repositories.                                               |
 
 ### MVP (in v1)
+
 1. Portfolio list + instrument detail
 2. Full CRUD on instruments and buys
 3. Dashboard summary (totals + breakdowns)
 4. Export / backup (export-only)
 
 ### Deferred (not v1)
+
 - Restore / import from backup file (needs document-picker + validation)
 - Live market prices / current value / returns
 - Multi-currency
@@ -39,6 +41,7 @@ and buy kind.
 ## Platform
 
 Existing fresh Expo template:
+
 - Expo SDK 57, expo-router (file-based, typed routes, `reactCompiler` experiment on)
 - React 19.2, React Native 0.86
 - Native-styling deps present: `@expo/ui`, `expo-glass-effect`, `expo-symbols`
@@ -53,34 +56,38 @@ during planning/implementation, not assumed here.
 Two tables. Nothing derived is stored — all totals computed in queries.
 
 ### `instruments`
-| col | type | constraints | notes |
-|---|---|---|---|
-| id | integer | pk, autoincrement | |
-| name | text | not null | e.g. "HDFC Nifty 50 ETF" |
-| type | text | not null | one of `'stock' \| 'etf' \| 'bond'` |
-| description | text | nullable | |
-| createdAt | integer | not null | epoch ms |
-| updatedAt | integer | not null | epoch ms |
+
+| col         | type    | constraints       | notes                               |
+| ----------- | ------- | ----------------- | ----------------------------------- |
+| id          | integer | pk, autoincrement |                                     |
+| name        | text    | not null          | e.g. "HDFC Nifty 50 ETF"            |
+| type        | text    | not null          | one of `'stock' \| 'etf' \| 'bond'` |
+| description | text    | nullable          |                                     |
+| createdAt   | integer | not null          | epoch ms                            |
+| updatedAt   | integer | not null          | epoch ms                            |
 
 ### `transactions` (buys)
-| col | type | constraints | notes |
-|---|---|---|---|
-| id | integer | pk, autoincrement | |
-| instrumentId | integer | not null, fk → instruments.id, **on delete cascade** | |
-| kind | text | not null | one of `'lumpsum' \| 'sip'` |
-| pricePerUnit | real | not null, > 0 | "amount per unit" |
-| quantity | real | not null, > 0 | fractional allowed (SIP/ETF) |
-| date | integer | not null | buy date, epoch ms |
-| note | text | nullable | per-buy description |
-| createdAt | integer | not null | epoch ms |
-| updatedAt | integer | not null | epoch ms |
+
+| col          | type    | constraints                                          | notes                        |
+| ------------ | ------- | ---------------------------------------------------- | ---------------------------- |
+| id           | integer | pk, autoincrement                                    |                              |
+| instrumentId | integer | not null, fk → instruments.id, **on delete cascade** |                              |
+| kind         | text    | not null                                             | one of `'lumpsum' \| 'sip'`  |
+| pricePerUnit | real    | not null, > 0                                        | "amount per unit"            |
+| quantity     | real    | not null, > 0                                        | fractional allowed (SIP/ETF) |
+| date         | integer | not null                                             | buy date, epoch ms           |
+| note         | text    | nullable                                             | per-buy description          |
+| createdAt    | integer | not null                                             | epoch ms                     |
+| updatedAt    | integer | not null                                             | epoch ms                     |
 
 **Required-field mapping** (user requirement: every investment captures name,
 description, amount per unit, date, quantity per unit):
+
 - name + description + type → `instruments`
 - pricePerUnit + quantity + date + note → `transactions`
 
 **Derived (query-time only):**
+
 - per transaction: `amount = pricePerUnit * quantity`
 - per instrument: `totalUnits = Σ quantity`, `totalInvested = Σ amount`, `avgCost = totalInvested / totalUnits`
 - portfolio: total invested; grouped by `type`; grouped by `kind`
@@ -139,6 +146,7 @@ Existing template screens (`index`, `explore`, `app-tabs`) are repurposed/replac
 `Screen → feature hook (TanStack Query) → repository (Drizzle) → expo-sqlite`
 
 Mutations invalidate query keys so lists and dashboard refetch:
+
 - `['instruments']` — portfolio list
 - `['instrument', id]` — one instrument
 - `['transactions', instrumentId]` — an instrument's buys
@@ -147,6 +155,7 @@ Mutations invalidate query keys so lists and dashboard refetch:
 ## Screens
 
 ### Dashboard (`(tabs)/index`)
+
 - Total invested (Σ all transaction amounts)
 - Breakdown by asset type (stock / etf / bond): amount + %
 - Breakdown by kind (lumpsum vs sip): amount + %
@@ -154,18 +163,22 @@ Mutations invalidate query keys so lists and dashboard refetch:
 - Rendered with **plain proportional `View` bars** — no chart dependency in v1.
 
 ### Portfolio (`(tabs)/portfolio`)
+
 - List of instruments; each row shows name, type, total invested, total units.
 - Tap → instrument detail. Add-instrument action.
 
 ### Instrument detail (`instrument/[id]`)
+
 - Header: name, type, description, totalInvested, totalUnits, avgCost.
 - List of buys (kind, price/unit, qty, amount, date, note).
 - Add buy; edit/delete instrument; edit/delete each buy.
 
 ### Forms (instrument new/edit, transaction new/edit)
+
 - Validated inputs. Type/kind pickers. Date picker. Save via mutation.
 
 ### Settings (`settings`)
+
 - Export to JSON and CSV → share sheet.
 
 ## Error handling

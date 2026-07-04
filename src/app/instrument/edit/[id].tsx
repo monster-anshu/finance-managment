@@ -1,9 +1,15 @@
-import { router, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator } from 'react-native';
+import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator } from "react-native";
 
-import { Screen } from '@/components/screen';
-import { useInstrument, useUpdateInstrument } from '@/features/instruments/hooks';
-import { InstrumentForm, type InstrumentFormValues } from '@/features/instruments/instrument-form';
+import { Screen } from "@/components/screen";
+import {
+  useInstrument,
+  useUpdateInstrument,
+} from "@/features/instruments/hooks";
+import {
+  InstrumentForm,
+  type InstrumentFormValues,
+} from "@/features/instruments/instrument-form";
 
 export default function EditInstrumentScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -22,7 +28,7 @@ export default function EditInstrumentScreen() {
   function handleSubmit(values: InstrumentFormValues) {
     mutate(
       { id: instrumentId, input: values },
-      { onSuccess: () => router.back() },
+      { onSuccess: () => router.back() }
     );
   }
 
@@ -31,7 +37,7 @@ export default function EditInstrumentScreen() {
       initial={{
         name: instrument.name,
         type: instrument.type,
-        description: instrument.description ?? '',
+        description: instrument.description ?? "",
       }}
       submitLabel="Save Changes"
       submitting={saving}

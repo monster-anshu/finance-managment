@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -12,9 +12,10 @@ export const queryClient = new QueryClient({
 });
 
 export const queryKeys = {
-  instruments: ['instruments'] as const,
-  instrument: (id: number) => ['instrument', id] as const,
-  transactions: (instrumentId: number) => ['transactions', instrumentId] as const,
-  allTransactions: ['transactions', 'all'] as const,
-  summary: ['summary'] as const,
+  instruments: ["instruments"] as const,
+  instrument: (id: number) => ["instrument", id] as const,
+  transactions: (instrumentId: number) =>
+    ["transactions", instrumentId] as const,
+  allTransactions: ["transactions", "all"] as const,
+  summary: ["summary"] as const,
 };

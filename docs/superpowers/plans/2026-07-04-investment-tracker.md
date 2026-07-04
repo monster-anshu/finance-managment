@@ -105,6 +105,7 @@ git commit -m "chore: add sqlite/drizzle/react-query/file-system/sharing/jest de
 ## Task 2: Build config for Drizzle migrations + jest
 
 **Files:**
+
 - Create: `babel.config.js`
 - Create: `metro.config.js`
 - Create: `drizzle.config.ts`
@@ -118,8 +119,8 @@ git commit -m "chore: add sqlite/drizzle/react-query/file-system/sharing/jest de
 module.exports = function (api) {
   api.cache(true);
   return {
-    presets: ['babel-preset-expo'],
-    plugins: [['inline-import', { extensions: ['.sql'] }]],
+    presets: ["babel-preset-expo"],
+    plugins: [["inline-import", { extensions: [".sql"] }]],
   };
 };
 ```
@@ -127,10 +128,10 @@ module.exports = function (api) {
 - [ ] **Step 2: Create `metro.config.js`**
 
 ```javascript
-const { getDefaultConfig } = require('expo/metro-config');
+const { getDefaultConfig } = require("expo/metro-config");
 
 const config = getDefaultConfig(__dirname);
-config.resolver.sourceExts.push('sql');
+config.resolver.sourceExts.push("sql");
 
 module.exports = config;
 ```
@@ -138,13 +139,13 @@ module.exports = config;
 - [ ] **Step 3: Create `drizzle.config.ts`**
 
 ```typescript
-import { defineConfig } from 'drizzle-kit';
+import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-  dialect: 'sqlite',
-  driver: 'expo',
-  schema: './src/db/schema.ts',
-  out: './src/db/drizzle',
+  dialect: "sqlite",
+  driver: "expo",
+  schema: "./src/db/schema.ts",
+  out: "./src/db/drizzle",
 });
 ```
 
@@ -186,26 +187,27 @@ git commit -m "chore: babel inline-import, metro sql ext, drizzle + jest config"
 ## Task 3: Domain types
 
 **Files:**
+
 - Create: `src/lib/types.ts`
 
 - [ ] **Step 1: Create `src/lib/types.ts`**
 
 ```typescript
-export type AssetType = 'stock' | 'etf' | 'bond';
-export type TxKind = 'lumpsum' | 'sip';
+export type AssetType = "stock" | "etf" | "bond";
+export type TxKind = "lumpsum" | "sip";
 
-export const ASSET_TYPES: readonly AssetType[] = ['stock', 'etf', 'bond'];
-export const TX_KINDS: readonly TxKind[] = ['lumpsum', 'sip'];
+export const ASSET_TYPES: readonly AssetType[] = ["stock", "etf", "bond"];
+export const TX_KINDS: readonly TxKind[] = ["lumpsum", "sip"];
 
 export const ASSET_TYPE_LABELS: Record<AssetType, string> = {
-  stock: 'Stock',
-  etf: 'ETF',
-  bond: 'Bond',
+  stock: "Stock",
+  etf: "ETF",
+  bond: "Bond",
 };
 
 export const TX_KIND_LABELS: Record<TxKind, string> = {
-  lumpsum: 'Lumpsum',
-  sip: 'SIP',
+  lumpsum: "Lumpsum",
+  sip: "SIP",
 };
 ```
 
@@ -226,6 +228,7 @@ git commit -m "feat: add investment domain types"
 ## Task 4: Currency/number/date formatting (TDD)
 
 **Files:**
+
 - Test: `src/lib/__tests__/format.test.ts`
 - Create: `src/lib/format.ts`
 
@@ -234,39 +237,39 @@ git commit -m "feat: add investment domain types"
 `src/lib/__tests__/format.test.ts`:
 
 ```typescript
-import { formatINR, formatQuantity, formatDate } from '@/lib/format';
+import { formatINR, formatQuantity, formatDate } from "@/lib/format";
 
-describe('formatINR', () => {
-  it('formats a value with the rupee symbol and 2 decimals', () => {
-    expect(formatINR(1234.5)).toBe('₹1,234.50');
+describe("formatINR", () => {
+  it("formats a value with the rupee symbol and 2 decimals", () => {
+    expect(formatINR(1234.5)).toBe("₹1,234.50");
   });
-  it('formats zero', () => {
-    expect(formatINR(0)).toBe('₹0.00');
+  it("formats zero", () => {
+    expect(formatINR(0)).toBe("₹0.00");
   });
-  it('uses Indian digit grouping', () => {
-    expect(formatINR(100000)).toBe('₹1,00,000.00');
+  it("uses Indian digit grouping", () => {
+    expect(formatINR(100000)).toBe("₹1,00,000.00");
   });
-  it('falls back to ₹0.00 for non-finite input', () => {
-    expect(formatINR(Number.NaN)).toBe('₹0.00');
+  it("falls back to ₹0.00 for non-finite input", () => {
+    expect(formatINR(Number.NaN)).toBe("₹0.00");
   });
 });
 
-describe('formatQuantity', () => {
-  it('shows fractional units without forcing decimals', () => {
-    expect(formatQuantity(10.5)).toBe('10.5');
+describe("formatQuantity", () => {
+  it("shows fractional units without forcing decimals", () => {
+    expect(formatQuantity(10.5)).toBe("10.5");
   });
-  it('shows integer units plainly', () => {
-    expect(formatQuantity(3)).toBe('3');
+  it("shows integer units plainly", () => {
+    expect(formatQuantity(3)).toBe("3");
   });
 });
 
-describe('formatDate', () => {
-  it('renders a readable date containing the year', () => {
+describe("formatDate", () => {
+  it("renders a readable date containing the year", () => {
     const epoch = Date.UTC(2026, 6, 4, 12, 0, 0); // noon UTC avoids tz day-flip
-    expect(formatDate(epoch)).toContain('2026');
+    expect(formatDate(epoch)).toContain("2026");
   });
-  it('returns empty string for invalid input', () => {
-    expect(formatDate(Number.NaN)).toBe('');
+  it("returns empty string for invalid input", () => {
+    expect(formatDate(Number.NaN)).toBe("");
   });
 });
 ```
@@ -281,34 +284,34 @@ Expected: FAIL — "Cannot find module '@/lib/format'".
 `src/lib/format.ts`:
 
 ```typescript
-const inrFormatter = new Intl.NumberFormat('en-IN', {
-  style: 'currency',
-  currency: 'INR',
+const inrFormatter = new Intl.NumberFormat("en-IN", {
+  style: "currency",
+  currency: "INR",
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 });
 
-const quantityFormatter = new Intl.NumberFormat('en-IN', {
+const quantityFormatter = new Intl.NumberFormat("en-IN", {
   maximumFractionDigits: 4,
 });
 
 export function formatINR(amount: number): string {
-  if (!Number.isFinite(amount)) return '₹0.00';
+  if (!Number.isFinite(amount)) return "₹0.00";
   return inrFormatter.format(amount);
 }
 
 export function formatQuantity(quantity: number): string {
-  if (!Number.isFinite(quantity)) return '0';
+  if (!Number.isFinite(quantity)) return "0";
   return quantityFormatter.format(quantity);
 }
 
 export function formatDate(epochMs: number): string {
   const date = new Date(epochMs);
-  if (Number.isNaN(date.getTime())) return '';
-  return date.toLocaleDateString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
   });
 }
 ```
@@ -330,6 +333,7 @@ git commit -m "feat: add INR/quantity/date formatters with tests"
 ## Task 5: Form validation (TDD)
 
 **Files:**
+
 - Test: `src/lib/__tests__/validation.test.ts`
 - Create: `src/lib/validation.ts`
 
@@ -344,48 +348,61 @@ import {
   isValid,
   type InstrumentInput,
   type TransactionInput,
-} from '@/lib/validation';
+} from "@/lib/validation";
 
-const goodInstrument: InstrumentInput = { name: 'Nifty 50 ETF', type: 'etf', description: '' };
+const goodInstrument: InstrumentInput = {
+  name: "Nifty 50 ETF",
+  type: "etf",
+  description: "",
+};
 const goodTransaction: TransactionInput = {
-  kind: 'sip',
-  pricePerUnit: '250.5',
-  quantity: '10',
+  kind: "sip",
+  pricePerUnit: "250.5",
+  quantity: "10",
   date: Date.UTC(2026, 0, 1),
-  note: '',
+  note: "",
 };
 
-describe('validateInstrument', () => {
-  it('passes a valid instrument', () => {
+describe("validateInstrument", () => {
+  it("passes a valid instrument", () => {
     expect(isValid(validateInstrument(goodInstrument))).toBe(true);
   });
-  it('requires a name', () => {
-    expect(validateInstrument({ ...goodInstrument, name: '  ' }).name).toBe('Name is required');
+  it("requires a name", () => {
+    expect(validateInstrument({ ...goodInstrument, name: "  " }).name).toBe(
+      "Name is required"
+    );
   });
-  it('requires a type', () => {
-    expect(validateInstrument({ ...goodInstrument, type: '' }).type).toBe('Type is required');
+  it("requires a type", () => {
+    expect(validateInstrument({ ...goodInstrument, type: "" }).type).toBe(
+      "Type is required"
+    );
   });
 });
 
-describe('validateTransaction', () => {
-  it('passes a valid transaction', () => {
+describe("validateTransaction", () => {
+  it("passes a valid transaction", () => {
     expect(isValid(validateTransaction(goodTransaction))).toBe(true);
   });
-  it('requires a kind', () => {
-    expect(validateTransaction({ ...goodTransaction, kind: '' }).kind).toBe('Kind is required');
-  });
-  it('rejects non-positive price', () => {
-    expect(validateTransaction({ ...goodTransaction, pricePerUnit: '0' }).pricePerUnit).toBe(
-      'Price must be greater than 0',
+  it("requires a kind", () => {
+    expect(validateTransaction({ ...goodTransaction, kind: "" }).kind).toBe(
+      "Kind is required"
     );
   });
-  it('rejects non-numeric quantity', () => {
-    expect(validateTransaction({ ...goodTransaction, quantity: 'abc' }).quantity).toBe(
-      'Quantity must be greater than 0',
-    );
+  it("rejects non-positive price", () => {
+    expect(
+      validateTransaction({ ...goodTransaction, pricePerUnit: "0" })
+        .pricePerUnit
+    ).toBe("Price must be greater than 0");
   });
-  it('requires a date', () => {
-    expect(validateTransaction({ ...goodTransaction, date: null }).date).toBe('Date is required');
+  it("rejects non-numeric quantity", () => {
+    expect(
+      validateTransaction({ ...goodTransaction, quantity: "abc" }).quantity
+    ).toBe("Quantity must be greater than 0");
+  });
+  it("requires a date", () => {
+    expect(validateTransaction({ ...goodTransaction, date: null }).date).toBe(
+      "Date is required"
+    );
   });
 });
 ```
@@ -400,16 +417,16 @@ Expected: FAIL — "Cannot find module '@/lib/validation'".
 `src/lib/validation.ts`:
 
 ```typescript
-import { ASSET_TYPES, TX_KINDS, type AssetType, type TxKind } from './types';
+import { ASSET_TYPES, TX_KINDS, type AssetType, type TxKind } from "./types";
 
 export interface InstrumentInput {
   name: string;
-  type: AssetType | '';
+  type: AssetType | "";
   description: string;
 }
 
 export interface TransactionInput {
-  kind: TxKind | '';
+  kind: TxKind | "";
   pricePerUnit: string;
   quantity: string;
   date: number | null;
@@ -418,44 +435,48 @@ export interface TransactionInput {
 
 export type Errors<T> = Partial<Record<keyof T, string>>;
 
-export function validateInstrument(input: InstrumentInput): Errors<InstrumentInput> {
+export function validateInstrument(
+  input: InstrumentInput
+): Errors<InstrumentInput> {
   const errors: Errors<InstrumentInput> = {};
   if (!input.name.trim()) {
-    errors.name = 'Name is required';
+    errors.name = "Name is required";
   }
   if (!input.type) {
-    errors.type = 'Type is required';
+    errors.type = "Type is required";
   } else if (!ASSET_TYPES.includes(input.type)) {
-    errors.type = 'Invalid type';
+    errors.type = "Invalid type";
   }
   return errors;
 }
 
-export function validateTransaction(input: TransactionInput): Errors<TransactionInput> {
+export function validateTransaction(
+  input: TransactionInput
+): Errors<TransactionInput> {
   const errors: Errors<TransactionInput> = {};
 
   if (!input.kind) {
-    errors.kind = 'Kind is required';
+    errors.kind = "Kind is required";
   } else if (!TX_KINDS.includes(input.kind)) {
-    errors.kind = 'Invalid kind';
+    errors.kind = "Invalid kind";
   }
 
   const price = Number(input.pricePerUnit);
   if (!input.pricePerUnit.trim()) {
-    errors.pricePerUnit = 'Price is required';
+    errors.pricePerUnit = "Price is required";
   } else if (!Number.isFinite(price) || price <= 0) {
-    errors.pricePerUnit = 'Price must be greater than 0';
+    errors.pricePerUnit = "Price must be greater than 0";
   }
 
   const quantity = Number(input.quantity);
   if (!input.quantity.trim()) {
-    errors.quantity = 'Quantity is required';
+    errors.quantity = "Quantity is required";
   } else if (!Number.isFinite(quantity) || quantity <= 0) {
-    errors.quantity = 'Quantity must be greater than 0';
+    errors.quantity = "Quantity must be greater than 0";
   }
 
   if (input.date == null) {
-    errors.date = 'Date is required';
+    errors.date = "Date is required";
   }
 
   return errors;
@@ -483,6 +504,7 @@ git commit -m "feat: add instrument/transaction validation with tests"
 ## Task 6: Portfolio aggregation (TDD)
 
 **Files:**
+
 - Test: `src/lib/__tests__/aggregation.test.ts`
 - Create: `src/lib/aggregation.ts`
 
@@ -499,21 +521,21 @@ import {
   summarizeByInstrument,
   type AggTransaction,
   type AggInstrument,
-} from '@/lib/aggregation';
+} from "@/lib/aggregation";
 
 const instruments: AggInstrument[] = [
-  { id: 1, name: 'Nifty ETF', type: 'etf' },
-  { id: 2, name: 'ACME Corp', type: 'stock' },
+  { id: 1, name: "Nifty ETF", type: "etf" },
+  { id: 2, name: "ACME Corp", type: "stock" },
 ];
 
 const txns: AggTransaction[] = [
-  { instrumentId: 1, kind: 'sip', pricePerUnit: 100, quantity: 10 }, // 1000
-  { instrumentId: 1, kind: 'sip', pricePerUnit: 120, quantity: 5 }, //  600
-  { instrumentId: 2, kind: 'lumpsum', pricePerUnit: 50, quantity: 4 }, // 200
+  { instrumentId: 1, kind: "sip", pricePerUnit: 100, quantity: 10 }, // 1000
+  { instrumentId: 1, kind: "sip", pricePerUnit: 120, quantity: 5 }, //  600
+  { instrumentId: 2, kind: "lumpsum", pricePerUnit: 50, quantity: 4 }, // 200
 ];
 
-describe('summarizeTransactions', () => {
-  it('sums units and invested and computes average cost', () => {
+describe("summarizeTransactions", () => {
+  it("sums units and invested and computes average cost", () => {
     const s = summarizeTransactions([
       { pricePerUnit: 100, quantity: 10 },
       { pricePerUnit: 120, quantity: 5 },
@@ -522,13 +544,17 @@ describe('summarizeTransactions', () => {
     expect(s.totalInvested).toBe(1600);
     expect(s.avgCost).toBeCloseTo(106.6667, 3);
   });
-  it('returns zeros (no divide-by-zero) for empty input', () => {
-    expect(summarizeTransactions([])).toEqual({ totalUnits: 0, totalInvested: 0, avgCost: 0 });
+  it("returns zeros (no divide-by-zero) for empty input", () => {
+    expect(summarizeTransactions([])).toEqual({
+      totalUnits: 0,
+      totalInvested: 0,
+      avgCost: 0,
+    });
   });
 });
 
-describe('summarizePortfolio', () => {
-  it('totals invested and breaks down by type and kind', () => {
+describe("summarizePortfolio", () => {
+  it("totals invested and breaks down by type and kind", () => {
     const p = summarizePortfolio(instruments, txns);
     expect(p.totalInvested).toBe(1800);
     expect(p.byType).toEqual({ stock: 200, etf: 1600, bond: 0 });
@@ -538,8 +564,8 @@ describe('summarizePortfolio', () => {
   });
 });
 
-describe('summarizeByInstrument', () => {
-  it('attaches a per-instrument summary and sorts by invested desc', () => {
+describe("summarizeByInstrument", () => {
+  it("attaches a per-instrument summary and sorts by invested desc", () => {
     const rows = summarizeByInstrument(instruments, txns);
     expect(rows[0].instrument.id).toBe(1);
     expect(rows[0].summary.totalInvested).toBe(1600);
@@ -558,7 +584,7 @@ Expected: FAIL — "Cannot find module '@/lib/aggregation'".
 `src/lib/aggregation.ts`:
 
 ```typescript
-import { ASSET_TYPES, TX_KINDS, type AssetType, type TxKind } from './types';
+import { ASSET_TYPES, TX_KINDS, type AssetType, type TxKind } from "./types";
 
 export interface AggInstrument {
   id: number;
@@ -587,13 +613,15 @@ export interface PortfolioSummary {
   buyCount: number;
 }
 
-export interface InstrumentWithSummary<T extends AggInstrument = AggInstrument> {
+export interface InstrumentWithSummary<
+  T extends AggInstrument = AggInstrument,
+> {
   instrument: T;
   summary: InstrumentSummary;
 }
 
 export function summarizeTransactions(
-  txns: Pick<AggTransaction, 'pricePerUnit' | 'quantity'>[],
+  txns: Pick<AggTransaction, "pricePerUnit" | "quantity">[]
 ): InstrumentSummary {
   let totalUnits = 0;
   let totalInvested = 0;
@@ -610,10 +638,16 @@ export function summarizeTransactions(
 
 export function summarizePortfolio(
   instruments: AggInstrument[],
-  txns: AggTransaction[],
+  txns: AggTransaction[]
 ): PortfolioSummary {
-  const byType = Object.fromEntries(ASSET_TYPES.map((t) => [t, 0])) as Record<AssetType, number>;
-  const byKind = Object.fromEntries(TX_KINDS.map((k) => [k, 0])) as Record<TxKind, number>;
+  const byType = Object.fromEntries(ASSET_TYPES.map((t) => [t, 0])) as Record<
+    AssetType,
+    number
+  >;
+  const byKind = Object.fromEntries(TX_KINDS.map((k) => [k, 0])) as Record<
+    TxKind,
+    number
+  >;
   const typeById = new Map(instruments.map((i) => [i.id, i.type]));
 
   let totalInvested = 0;
@@ -636,7 +670,7 @@ export function summarizePortfolio(
 
 export function summarizeByInstrument<T extends AggInstrument>(
   instruments: T[],
-  txns: AggTransaction[],
+  txns: AggTransaction[]
 ): InstrumentWithSummary<T>[] {
   const byInstrument = new Map<number, AggTransaction[]>();
   for (const t of txns) {
@@ -671,6 +705,7 @@ git commit -m "feat: add portfolio aggregation with tests"
 ## Task 7: CSV export builder (TDD)
 
 **Files:**
+
 - Test: `src/lib/__tests__/csv.test.ts`
 - Create: `src/lib/csv.ts`
 
@@ -679,26 +714,41 @@ git commit -m "feat: add portfolio aggregation with tests"
 `src/lib/__tests__/csv.test.ts`:
 
 ```typescript
-import { buildTransactionsCsv, type CsvInstrument, type CsvTransaction } from '@/lib/csv';
+import {
+  buildTransactionsCsv,
+  type CsvInstrument,
+  type CsvTransaction,
+} from "@/lib/csv";
 
-const instruments: CsvInstrument[] = [{ id: 1, name: 'Nifty, 50 ETF', type: 'etf' }];
+const instruments: CsvInstrument[] = [
+  { id: 1, name: "Nifty, 50 ETF", type: "etf" },
+];
 const txns: CsvTransaction[] = [
-  { instrumentId: 1, kind: 'sip', pricePerUnit: 100, quantity: 2, date: Date.UTC(2026, 0, 1), note: 'first "buy"' },
+  {
+    instrumentId: 1,
+    kind: "sip",
+    pricePerUnit: 100,
+    quantity: 2,
+    date: Date.UTC(2026, 0, 1),
+    note: 'first "buy"',
+  },
 ];
 
-describe('buildTransactionsCsv', () => {
-  it('emits a header row', () => {
+describe("buildTransactionsCsv", () => {
+  it("emits a header row", () => {
     const csv = buildTransactionsCsv([], []);
-    expect(csv).toBe('Instrument,Type,Kind,PricePerUnit,Quantity,Amount,Date,Note');
+    expect(csv).toBe(
+      "Instrument,Type,Kind,PricePerUnit,Quantity,Amount,Date,Note"
+    );
   });
-  it('quotes fields containing commas and escapes quotes', () => {
+  it("quotes fields containing commas and escapes quotes", () => {
     const csv = buildTransactionsCsv(instruments, txns);
-    const [, row] = csv.split('\n');
+    const [, row] = csv.split("\n");
     expect(row).toContain('"Nifty, 50 ETF"');
     expect(row).toContain('"first ""buy"""');
-    expect(row).toContain('ETF');
-    expect(row).toContain('SIP');
-    expect(row).toContain('200'); // amount = 100 * 2
+    expect(row).toContain("ETF");
+    expect(row).toContain("SIP");
+    expect(row).toContain("200"); // amount = 100 * 2
   });
 });
 ```
@@ -713,7 +763,12 @@ Expected: FAIL — "Cannot find module '@/lib/csv'".
 `src/lib/csv.ts`:
 
 ```typescript
-import { ASSET_TYPE_LABELS, TX_KIND_LABELS, type AssetType, type TxKind } from './types';
+import {
+  ASSET_TYPE_LABELS,
+  TX_KIND_LABELS,
+  type AssetType,
+  type TxKind,
+} from "./types";
 
 export interface CsvInstrument {
   id: number;
@@ -730,7 +785,16 @@ export interface CsvTransaction {
   note: string | null;
 }
 
-const HEADER = ['Instrument', 'Type', 'Kind', 'PricePerUnit', 'Quantity', 'Amount', 'Date', 'Note'];
+const HEADER = [
+  "Instrument",
+  "Type",
+  "Kind",
+  "PricePerUnit",
+  "Quantity",
+  "Amount",
+  "Date",
+  "Note",
+];
 
 function escapeCsv(value: string): string {
   if (/[",\n]/.test(value)) {
@@ -741,27 +805,27 @@ function escapeCsv(value: string): string {
 
 export function buildTransactionsCsv(
   instruments: CsvInstrument[],
-  transactions: CsvTransaction[],
+  transactions: CsvTransaction[]
 ): string {
   const byId = new Map(instruments.map((i) => [i.id, i]));
 
   const rows = transactions.map((t) => {
     const instrument = byId.get(t.instrumentId);
     return [
-      instrument?.name ?? '',
-      instrument ? ASSET_TYPE_LABELS[instrument.type] : '',
+      instrument?.name ?? "",
+      instrument ? ASSET_TYPE_LABELS[instrument.type] : "",
       TX_KIND_LABELS[t.kind],
       String(t.pricePerUnit),
       String(t.quantity),
       String(t.pricePerUnit * t.quantity),
       new Date(t.date).toISOString(),
-      t.note ?? '',
+      t.note ?? "",
     ]
       .map(escapeCsv)
-      .join(',');
+      .join(",");
   });
 
-  return [HEADER.join(','), ...rows].join('\n');
+  return [HEADER.join(","), ...rows].join("\n");
 }
 ```
 
@@ -782,40 +846,41 @@ git commit -m "feat: add CSV export builder with tests"
 ## Task 8: Drizzle schema
 
 **Files:**
+
 - Create: `src/db/schema.ts`
 
 - [ ] **Step 1: Create `src/db/schema.ts`**
 
 ```typescript
-import { integer, real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { integer, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-import { ASSET_TYPES, TX_KINDS } from '@/lib/types';
+import { ASSET_TYPES, TX_KINDS } from "@/lib/types";
 
-export const instruments = sqliteTable('instruments', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  type: text('type', { enum: ASSET_TYPES as unknown as [string, ...string[]] }).$type<
-    (typeof ASSET_TYPES)[number]
-  >().notNull(),
-  description: text('description'),
-  createdAt: integer('created_at').notNull(),
-  updatedAt: integer('updated_at').notNull(),
+export const instruments = sqliteTable("instruments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  type: text("type", { enum: ASSET_TYPES as unknown as [string, ...string[]] })
+    .$type<(typeof ASSET_TYPES)[number]>()
+    .notNull(),
+  description: text("description"),
+  createdAt: integer("created_at").notNull(),
+  updatedAt: integer("updated_at").notNull(),
 });
 
-export const transactions = sqliteTable('transactions', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  instrumentId: integer('instrument_id')
+export const transactions = sqliteTable("transactions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  instrumentId: integer("instrument_id")
     .notNull()
-    .references(() => instruments.id, { onDelete: 'cascade' }),
-  kind: text('kind', { enum: TX_KINDS as unknown as [string, ...string[]] }).$type<
-    (typeof TX_KINDS)[number]
-  >().notNull(),
-  pricePerUnit: real('price_per_unit').notNull(),
-  quantity: real('quantity').notNull(),
-  date: integer('date').notNull(),
-  note: text('note'),
-  createdAt: integer('created_at').notNull(),
-  updatedAt: integer('updated_at').notNull(),
+    .references(() => instruments.id, { onDelete: "cascade" }),
+  kind: text("kind", { enum: TX_KINDS as unknown as [string, ...string[]] })
+    .$type<(typeof TX_KINDS)[number]>()
+    .notNull(),
+  pricePerUnit: real("price_per_unit").notNull(),
+  quantity: real("quantity").notNull(),
+  date: integer("date").notNull(),
+  note: text("note"),
+  createdAt: integer("created_at").notNull(),
+  updatedAt: integer("updated_at").notNull(),
 });
 
 export type Instrument = typeof instruments.$inferSelect;
@@ -843,6 +908,7 @@ git commit -m "feat: add drizzle schema for instruments and transactions"
 ## Task 9: Generate the initial migration
 
 **Files:**
+
 - Create (generated): `src/db/drizzle/**` (SQL + `migrations.js` + `meta/`)
 
 - [ ] **Step 1: Generate**
@@ -867,17 +933,18 @@ git commit -m "feat: generate initial drizzle migration"
 ## Task 10: DB client
 
 **Files:**
+
 - Create: `src/db/client.ts`
 
 - [ ] **Step 1: Create `src/db/client.ts`**
 
 ```typescript
-import { drizzle } from 'drizzle-orm/expo-sqlite';
-import { openDatabaseSync } from 'expo-sqlite';
+import { drizzle } from "drizzle-orm/expo-sqlite";
+import { openDatabaseSync } from "expo-sqlite";
 
-import * as schema from './schema';
+import * as schema from "./schema";
 
-export const DATABASE_NAME = 'finance.db';
+export const DATABASE_NAME = "finance.db";
 
 const expoDb = openDatabaseSync(DATABASE_NAME, { enableChangeListener: false });
 
@@ -901,6 +968,7 @@ git commit -m "feat: add expo-sqlite drizzle client"
 ## Task 11: Instruments repository
 
 **Files:**
+
 - Create: `src/db/repositories/instruments.ts`
 
 > Cascade delete is implemented explicitly in a transaction (delete child rows then parent) so it does not depend on the SQLite `PRAGMA foreign_keys` connection setting.
@@ -908,22 +976,33 @@ git commit -m "feat: add expo-sqlite drizzle client"
 - [ ] **Step 1: Create `src/db/repositories/instruments.ts`**
 
 ```typescript
-import { eq } from 'drizzle-orm';
+import { eq } from "drizzle-orm";
 
-import { db } from '@/db/client';
-import { instruments, transactions, type Instrument, type NewInstrument } from '@/db/schema';
+import { db } from "@/db/client";
+import {
+  instruments,
+  transactions,
+  type Instrument,
+  type NewInstrument,
+} from "@/db/schema";
 
 export function listInstruments(): Promise<Instrument[]> {
   return db.select().from(instruments);
 }
 
-export async function getInstrument(id: number): Promise<Instrument | undefined> {
-  const rows = await db.select().from(instruments).where(eq(instruments.id, id)).limit(1);
+export async function getInstrument(
+  id: number
+): Promise<Instrument | undefined> {
+  const rows = await db
+    .select()
+    .from(instruments)
+    .where(eq(instruments.id, id))
+    .limit(1);
   return rows[0];
 }
 
 export async function createInstrument(
-  input: Omit<NewInstrument, 'id' | 'createdAt' | 'updatedAt'>,
+  input: Omit<NewInstrument, "id" | "createdAt" | "updatedAt">
 ): Promise<Instrument> {
   const now = Date.now();
   const [row] = await db
@@ -935,7 +1014,7 @@ export async function createInstrument(
 
 export async function updateInstrument(
   id: number,
-  input: Partial<Omit<NewInstrument, 'id' | 'createdAt' | 'updatedAt'>>,
+  input: Partial<Omit<NewInstrument, "id" | "createdAt" | "updatedAt">>
 ): Promise<Instrument> {
   const [row] = await db
     .update(instruments)
@@ -970,21 +1049,28 @@ git commit -m "feat: add instruments repository"
 ## Task 12: Transactions repository
 
 **Files:**
+
 - Create: `src/db/repositories/transactions.ts`
 
 - [ ] **Step 1: Create `src/db/repositories/transactions.ts`**
 
 ```typescript
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq } from "drizzle-orm";
 
-import { db } from '@/db/client';
-import { transactions, type NewTransaction, type Transaction } from '@/db/schema';
+import { db } from "@/db/client";
+import {
+  transactions,
+  type NewTransaction,
+  type Transaction,
+} from "@/db/schema";
 
 export function listAllTransactions(): Promise<Transaction[]> {
   return db.select().from(transactions);
 }
 
-export function listTransactionsByInstrument(instrumentId: number): Promise<Transaction[]> {
+export function listTransactionsByInstrument(
+  instrumentId: number
+): Promise<Transaction[]> {
   return db
     .select()
     .from(transactions)
@@ -992,13 +1078,19 @@ export function listTransactionsByInstrument(instrumentId: number): Promise<Tran
     .orderBy(desc(transactions.date));
 }
 
-export async function getTransaction(id: number): Promise<Transaction | undefined> {
-  const rows = await db.select().from(transactions).where(eq(transactions.id, id)).limit(1);
+export async function getTransaction(
+  id: number
+): Promise<Transaction | undefined> {
+  const rows = await db
+    .select()
+    .from(transactions)
+    .where(eq(transactions.id, id))
+    .limit(1);
   return rows[0];
 }
 
 export async function createTransaction(
-  input: Omit<NewTransaction, 'id' | 'createdAt' | 'updatedAt'>,
+  input: Omit<NewTransaction, "id" | "createdAt" | "updatedAt">
 ): Promise<Transaction> {
   const now = Date.now();
   const [row] = await db
@@ -1010,7 +1102,7 @@ export async function createTransaction(
 
 export async function updateTransaction(
   id: number,
-  input: Partial<Omit<NewTransaction, 'id' | 'createdAt' | 'updatedAt'>>,
+  input: Partial<Omit<NewTransaction, "id" | "createdAt" | "updatedAt">>
 ): Promise<Transaction> {
   const [row] = await db
     .update(transactions)
@@ -1042,6 +1134,7 @@ git commit -m "feat: add transactions repository"
 ## Task 13: Query client
 
 **Files:**
+
 - Create: `src/lib/query.ts`
 
 > Local-only app: disable browser/network-oriented refetch triggers; data only changes via our own mutations which invalidate explicitly.
@@ -1049,7 +1142,7 @@ git commit -m "feat: add transactions repository"
 - [ ] **Step 1: Create `src/lib/query.ts`**
 
 ```typescript
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -1063,11 +1156,12 @@ export const queryClient = new QueryClient({
 });
 
 export const queryKeys = {
-  instruments: ['instruments'] as const,
-  instrument: (id: number) => ['instrument', id] as const,
-  transactions: (instrumentId: number) => ['transactions', instrumentId] as const,
-  allTransactions: ['transactions', 'all'] as const,
-  summary: ['summary'] as const,
+  instruments: ["instruments"] as const,
+  instrument: (id: number) => ["instrument", id] as const,
+  transactions: (instrumentId: number) =>
+    ["transactions", instrumentId] as const,
+  allTransactions: ["transactions", "all"] as const,
+  summary: ["summary"] as const,
 };
 ```
 
@@ -1088,20 +1182,21 @@ git commit -m "feat: add react-query client and query keys"
 ## Task 14: Migration gate component
 
 **Files:**
+
 - Create: `src/components/migration-gate.tsx`
 
 - [ ] **Step 1: Create `src/components/migration-gate.tsx`**
 
 ```tsx
-import { useMigrations } from 'drizzle-orm/expo-sqlite/migrator';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
-import type { ReactNode } from 'react';
+import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import type { ReactNode } from "react";
 
-import { db } from '@/db/client';
-import migrations from '@/db/drizzle/migrations';
-import { Spacing } from '@/constants/theme';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { db } from "@/db/client";
+import migrations from "@/db/drizzle/migrations";
+import { Spacing } from "@/constants/theme";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 
 export function MigrationGate({ children }: { children: ReactNode }) {
   const { success, error } = useMigrations(db, migrations);
@@ -1110,7 +1205,11 @@ export function MigrationGate({ children }: { children: ReactNode }) {
     return (
       <ThemedView style={styles.center}>
         <ThemedText type="subtitle">Database error</ThemedText>
-        <ThemedText type="small" themeColor="textSecondary" style={styles.message}>
+        <ThemedText
+          type="small"
+          themeColor="textSecondary"
+          style={styles.message}
+        >
           {error.message}
         </ThemedText>
       </ThemedView>
@@ -1131,13 +1230,13 @@ export function MigrationGate({ children }: { children: ReactNode }) {
 const styles = StyleSheet.create({
   center: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: Spacing.four,
   },
   message: {
     marginTop: Spacing.two,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 ```
@@ -1161,6 +1260,7 @@ git commit -m "feat: add migration gate component"
 ## Task 15: Root layout — providers + migration gate + Stack
 
 **Files:**
+
 - Modify: `src/app/_layout.tsx`
 
 > Preserve the existing `ThemeProvider` (from `expo-router`) and `AnimatedSplashOverlay`. Wrap the app in `QueryClientProvider` → `MigrationGate`, and replace `<AppTabs />` (which was the whole navigator) with a `<Stack>` whose first screen is the `(tabs)` group (Task 16). Detail/form/settings screens are pushed over the tabs.
@@ -1168,32 +1268,47 @@ git commit -m "feat: add migration gate component"
 - [ ] **Step 1: Replace `src/app/_layout.tsx`**
 
 ```tsx
-import { QueryClientProvider } from '@tanstack/react-query';
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
+import { QueryClientProvider } from "@tanstack/react-query";
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useColorScheme } from "react-native";
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import { MigrationGate } from '@/components/migration-gate';
-import { queryClient } from '@/lib/query';
+import { AnimatedSplashOverlay } from "@/components/animated-icon";
+import { MigrationGate } from "@/components/migration-gate";
+import { queryClient } from "@/lib/query";
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <QueryClientProvider client={queryClient}>
         <MigrationGate>
           <AnimatedSplashOverlay />
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="instrument/[id]" options={{ title: 'Instrument' }} />
-            <Stack.Screen name="instrument/new" options={{ title: 'New Instrument', presentation: 'modal' }} />
-            <Stack.Screen name="instrument/edit/[id]" options={{ title: 'Edit Instrument', presentation: 'modal' }} />
-            <Stack.Screen name="transaction/new" options={{ title: 'New Buy', presentation: 'modal' }} />
-            <Stack.Screen name="transaction/edit/[id]" options={{ title: 'Edit Buy', presentation: 'modal' }} />
-            <Stack.Screen name="settings" options={{ title: 'Settings' }} />
+            <Stack.Screen
+              name="instrument/[id]"
+              options={{ title: "Instrument" }}
+            />
+            <Stack.Screen
+              name="instrument/new"
+              options={{ title: "New Instrument", presentation: "modal" }}
+            />
+            <Stack.Screen
+              name="instrument/edit/[id]"
+              options={{ title: "Edit Instrument", presentation: "modal" }}
+            />
+            <Stack.Screen
+              name="transaction/new"
+              options={{ title: "New Buy", presentation: "modal" }}
+            />
+            <Stack.Screen
+              name="transaction/edit/[id]"
+              options={{ title: "Edit Buy", presentation: "modal" }}
+            />
+            <Stack.Screen name="settings" options={{ title: "Settings" }} />
           </Stack>
         </MigrationGate>
       </QueryClientProvider>
@@ -1219,6 +1334,7 @@ git commit -m "feat: root layout with query provider, migration gate, stack"
 ## Task 16: Tabs group
 
 **Files:**
+
 - Create: `src/app/(tabs)/_layout.tsx`
 - Modify: `src/components/app-tabs.tsx`
 - Modify: `src/components/app-tabs.web.tsx`
@@ -1228,7 +1344,7 @@ git commit -m "feat: root layout with query provider, migration gate, stack"
 - [ ] **Step 1: Create `src/app/(tabs)/_layout.tsx`**
 
 ```tsx
-import AppTabs from '@/components/app-tabs';
+import AppTabs from "@/components/app-tabs";
 
 export default function TabsLayout() {
   return <AppTabs />;
@@ -1240,24 +1356,25 @@ export default function TabsLayout() {
 Replace the two `NativeTabs.Trigger` blocks so the names match the `(tabs)` route files and the labels/icons reflect Dashboard + Portfolio (reuse the existing `home.png` / `explore.png` icons):
 
 ```tsx
-import { NativeTabs } from 'expo-router/unstable-native-tabs';
-import { useColorScheme } from 'react-native';
+import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { useColorScheme } from "react-native";
 
-import { Colors } from '@/constants/theme';
+import { Colors } from "@/constants/theme";
 
 export default function AppTabs() {
   const scheme = useColorScheme();
-  const colors = Colors[scheme === 'unspecified' ? 'light' : scheme];
+  const colors = Colors[scheme === "unspecified" ? "light" : scheme];
 
   return (
     <NativeTabs
       backgroundColor={colors.background}
       indicatorColor={colors.backgroundElement}
-      labelStyle={{ selected: { color: colors.text } }}>
+      labelStyle={{ selected: { color: colors.text } }}
+    >
       <NativeTabs.Trigger name="index">
         <NativeTabs.Trigger.Label>Dashboard</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/home.png')}
+          src={require("@/assets/images/tabIcons/home.png")}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
@@ -1265,7 +1382,7 @@ export default function AppTabs() {
       <NativeTabs.Trigger name="portfolio">
         <NativeTabs.Trigger.Label>Portfolio</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/explore.png')}
+          src={require("@/assets/images/tabIcons/explore.png")}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
@@ -1295,12 +1412,14 @@ And change the brand text in `CustomTabList` from `Expo Starter` to `Finance`.
 `src/app/(tabs)/index.tsx`:
 
 ```tsx
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 
 export default function DashboardScreen() {
   return (
-    <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <ThemedView
+      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+    >
       <ThemedText type="title">Dashboard</ThemedText>
     </ThemedView>
   );
@@ -1310,12 +1429,14 @@ export default function DashboardScreen() {
 `src/app/(tabs)/portfolio.tsx`:
 
 ```tsx
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
 
 export default function PortfolioScreen() {
   return (
-    <ThemedView style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <ThemedView
+      style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+    >
       <ThemedText type="title">Portfolio</ThemedText>
     </ThemedView>
   );
@@ -1332,6 +1453,7 @@ git rm src/app/index.tsx src/app/explore.tsx
 
 Run: `npx expo start` and open on iOS simulator (press `i`).
 Observe:
+
 - App boots past a brief loading spinner (migrations run once).
 - Two tabs: **Dashboard** and **Portfolio**, each showing its placeholder title.
 - No red error screen.
@@ -1348,12 +1470,13 @@ git commit -m "feat: restructure navigation into stack + dashboard/portfolio tab
 ## Task 17: Instruments hooks
 
 **Files:**
+
 - Create: `src/features/instruments/hooks.ts`
 
 - [ ] **Step 1: Create `src/features/instruments/hooks.ts`**
 
 ```typescript
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   createInstrument,
@@ -1361,14 +1484,17 @@ import {
   getInstrument,
   listInstruments,
   updateInstrument,
-} from '@/db/repositories/instruments';
-import type { Instrument, NewInstrument } from '@/db/schema';
-import { queryKeys } from '@/lib/query';
+} from "@/db/repositories/instruments";
+import type { Instrument, NewInstrument } from "@/db/schema";
+import { queryKeys } from "@/lib/query";
 
-type InstrumentFields = Omit<NewInstrument, 'id' | 'createdAt' | 'updatedAt'>;
+type InstrumentFields = Omit<NewInstrument, "id" | "createdAt" | "updatedAt">;
 
 export function useInstruments() {
-  return useQuery({ queryKey: queryKeys.instruments, queryFn: listInstruments });
+  return useQuery({
+    queryKey: queryKeys.instruments,
+    queryFn: listInstruments,
+  });
 }
 
 export function useInstrument(id: number) {
@@ -1392,8 +1518,13 @@ export function useCreateInstrument() {
 export function useUpdateInstrument() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, input }: { id: number; input: Partial<InstrumentFields> }) =>
-      updateInstrument(id, input),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: number;
+      input: Partial<InstrumentFields>;
+    }) => updateInstrument(id, input),
     onSuccess: (row: Instrument) => {
       qc.invalidateQueries({ queryKey: queryKeys.instruments });
       qc.invalidateQueries({ queryKey: queryKeys.instrument(row.id) });
@@ -1432,12 +1563,13 @@ git commit -m "feat: add instruments react-query hooks"
 ## Task 18: Transactions hooks
 
 **Files:**
+
 - Create: `src/features/transactions/hooks.ts`
 
 - [ ] **Step 1: Create `src/features/transactions/hooks.ts`**
 
 ```typescript
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   createTransaction,
@@ -1446,14 +1578,17 @@ import {
   listAllTransactions,
   listTransactionsByInstrument,
   updateTransaction,
-} from '@/db/repositories/transactions';
-import type { NewTransaction, Transaction } from '@/db/schema';
-import { queryKeys } from '@/lib/query';
+} from "@/db/repositories/transactions";
+import type { NewTransaction, Transaction } from "@/db/schema";
+import { queryKeys } from "@/lib/query";
 
-type TransactionFields = Omit<NewTransaction, 'id' | 'createdAt' | 'updatedAt'>;
+type TransactionFields = Omit<NewTransaction, "id" | "createdAt" | "updatedAt">;
 
 export function useAllTransactions() {
-  return useQuery({ queryKey: queryKeys.allTransactions, queryFn: listAllTransactions });
+  return useQuery({
+    queryKey: queryKeys.allTransactions,
+    queryFn: listAllTransactions,
+  });
 }
 
 export function useTransactionsByInstrument(instrumentId: number) {
@@ -1465,14 +1600,14 @@ export function useTransactionsByInstrument(instrumentId: number) {
 
 export function useTransaction(id: number) {
   return useQuery({
-    queryKey: ['transaction', id],
+    queryKey: ["transaction", id],
     queryFn: () => getTransaction(id),
   });
 }
 
 function invalidateForInstrument(
   qc: ReturnType<typeof useQueryClient>,
-  instrumentId: number,
+  instrumentId: number
 ): void {
   qc.invalidateQueries({ queryKey: queryKeys.transactions(instrumentId) });
   qc.invalidateQueries({ queryKey: queryKeys.allTransactions });
@@ -1485,24 +1620,33 @@ export function useCreateTransaction() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (input: TransactionFields) => createTransaction(input),
-    onSuccess: (row: Transaction) => invalidateForInstrument(qc, row.instrumentId),
+    onSuccess: (row: Transaction) =>
+      invalidateForInstrument(qc, row.instrumentId),
   });
 }
 
 export function useUpdateTransaction() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, input }: { id: number; input: Partial<TransactionFields> }) =>
-      updateTransaction(id, input),
-    onSuccess: (row: Transaction) => invalidateForInstrument(qc, row.instrumentId),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: number;
+      input: Partial<TransactionFields>;
+    }) => updateTransaction(id, input),
+    onSuccess: (row: Transaction) =>
+      invalidateForInstrument(qc, row.instrumentId),
   });
 }
 
 export function useDeleteTransaction() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id }: { id: number; instrumentId: number }) => deleteTransaction(id),
-    onSuccess: (_data, variables) => invalidateForInstrument(qc, variables.instrumentId),
+    mutationFn: ({ id }: { id: number; instrumentId: number }) =>
+      deleteTransaction(id),
+    onSuccess: (_data, variables) =>
+      invalidateForInstrument(qc, variables.instrumentId),
   });
 }
 ```
@@ -1524,17 +1668,18 @@ git commit -m "feat: add transactions react-query hooks"
 ## Task 19: Dashboard summary hook
 
 **Files:**
+
 - Create: `src/features/dashboard/hooks.ts`
 
 - [ ] **Step 1: Create `src/features/dashboard/hooks.ts`**
 
 ```typescript
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { listInstruments } from '@/db/repositories/instruments';
-import { listAllTransactions } from '@/db/repositories/transactions';
-import { summarizePortfolio, type PortfolioSummary } from '@/lib/aggregation';
-import { queryKeys } from '@/lib/query';
+import { listInstruments } from "@/db/repositories/instruments";
+import { listAllTransactions } from "@/db/repositories/transactions";
+import { summarizePortfolio, type PortfolioSummary } from "@/lib/aggregation";
+import { queryKeys } from "@/lib/query";
 
 async function loadSummary(): Promise<PortfolioSummary> {
   const [instruments, transactions] = await Promise.all([
@@ -1568,6 +1713,7 @@ git commit -m "feat: add portfolio summary hook"
 ## Task 20: Shared UI components
 
 **Files:**
+
 - Create: `src/components/screen.tsx`
 - Create: `src/components/card.tsx`
 - Create: `src/components/stat.tsx`
@@ -1577,19 +1723,27 @@ git commit -m "feat: add portfolio summary hook"
 - [ ] **Step 1: Create `src/components/screen.tsx`**
 
 ```tsx
-import type { ReactNode } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import type { ReactNode } from "react";
+import { ScrollView, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { ThemedView } from '@/components/themed-view';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { ThemedView } from "@/components/themed-view";
+import { BottomTabInset, MaxContentWidth, Spacing } from "@/constants/theme";
 
-export function Screen({ children, scroll = true }: { children: ReactNode; scroll?: boolean }) {
+export function Screen({
+  children,
+  scroll = true,
+}: {
+  children: ReactNode;
+  scroll?: boolean;
+}) {
   return (
     <ThemedView style={styles.fill}>
-      <SafeAreaView style={styles.fill} edges={['top']}>
+      <SafeAreaView style={styles.fill} edges={["top"]}>
         {scroll ? (
-          <ScrollView contentContainerStyle={styles.content}>{children}</ScrollView>
+          <ScrollView contentContainerStyle={styles.content}>
+            {children}
+          </ScrollView>
         ) : (
           <ThemedView style={styles.content}>{children}</ThemedView>
         )}
@@ -1604,9 +1758,9 @@ const styles = StyleSheet.create({
     padding: Spacing.three,
     paddingBottom: BottomTabInset + Spacing.five,
     gap: Spacing.three,
-    width: '100%',
+    width: "100%",
     maxWidth: MaxContentWidth,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
 });
 ```
@@ -1614,13 +1768,19 @@ const styles = StyleSheet.create({
 - [ ] **Step 2: Create `src/components/card.tsx`**
 
 ```tsx
-import type { ReactNode } from 'react';
-import { StyleSheet, type StyleProp, type ViewStyle } from 'react-native';
+import type { ReactNode } from "react";
+import { StyleSheet, type StyleProp, type ViewStyle } from "react-native";
 
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { ThemedView } from "@/components/themed-view";
+import { Spacing } from "@/constants/theme";
 
-export function Card({ children, style }: { children: ReactNode; style?: StyleProp<ViewStyle> }) {
+export function Card({
+  children,
+  style,
+}: {
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+}) {
   return (
     <ThemedView type="backgroundElement" style={[styles.card, style]}>
       {children}
@@ -1640,10 +1800,10 @@ const styles = StyleSheet.create({
 - [ ] **Step 3: Create `src/components/stat.tsx`**
 
 ```tsx
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
 
 export function Stat({ label, value }: { label: string; value: string }) {
   return (
@@ -1658,9 +1818,9 @@ export function Stat({ label, value }: { label: string; value: string }) {
 
 const styles = StyleSheet.create({
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     gap: Spacing.two,
   },
 });
@@ -1669,11 +1829,11 @@ const styles = StyleSheet.create({
 - [ ] **Step 4: Create `src/components/empty-state.tsx`**
 
 ```tsx
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Spacing } from "@/constants/theme";
 
 export function EmptyState({ title, hint }: { title: string; hint?: string }) {
   return (
@@ -1689,19 +1849,23 @@ export function EmptyState({ title, hint }: { title: string; hint?: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: { alignItems: 'center', paddingVertical: Spacing.five, gap: Spacing.one },
-  hint: { textAlign: 'center' },
+  container: {
+    alignItems: "center",
+    paddingVertical: Spacing.five,
+    gap: Spacing.one,
+  },
+  hint: { textAlign: "center" },
 });
 ```
 
 - [ ] **Step 5: Create `src/components/bar-breakdown.tsx`**
 
 ```tsx
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { formatINR } from '@/lib/format';
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import { formatINR } from "@/lib/format";
 
 export interface BreakdownSegment {
   label: string;
@@ -1726,7 +1890,10 @@ export function BarBreakdown({ segments }: { segments: BreakdownSegment[] }) {
             </View>
             <View style={styles.track}>
               <View
-                style={[styles.fill, { width: `${pct}%`, backgroundColor: segment.color }]}
+                style={[
+                  styles.fill,
+                  { width: `${pct}%`, backgroundColor: segment.color },
+                ]}
               />
             </View>
           </View>
@@ -1739,12 +1906,12 @@ export function BarBreakdown({ segments }: { segments: BreakdownSegment[] }) {
 const styles = StyleSheet.create({
   container: { gap: Spacing.three },
   row: { gap: Spacing.one },
-  labelRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  labelRow: { flexDirection: "row", justifyContent: "space-between" },
   track: {
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'rgba(127,127,127,0.2)',
-    overflow: 'hidden',
+    backgroundColor: "rgba(127,127,127,0.2)",
+    overflow: "hidden",
   },
   fill: { height: 8, borderRadius: 4 },
 });
@@ -1767,6 +1934,7 @@ git commit -m "feat: add shared UI components"
 ## Task 21: Form field components
 
 **Files:**
+
 - Create: `src/components/labeled-field.tsx`
 - Create: `src/components/option-picker.tsx`
 - Create: `src/components/confirm.ts`
@@ -1774,18 +1942,23 @@ git commit -m "feat: add shared UI components"
 - [ ] **Step 1: Create `src/components/labeled-field.tsx`**
 
 ```tsx
-import { StyleSheet, TextInput, View, type TextInputProps } from 'react-native';
+import { StyleSheet, TextInput, View, type TextInputProps } from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { useTheme } from '@/hooks/use-theme';
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import { useTheme } from "@/hooks/use-theme";
 
 interface LabeledFieldProps extends TextInputProps {
   label: string;
   error?: string;
 }
 
-export function LabeledField({ label, error, style, ...rest }: LabeledFieldProps) {
+export function LabeledField({
+  label,
+  error,
+  style,
+  ...rest
+}: LabeledFieldProps) {
   const theme = useTheme();
   return (
     <View style={styles.container}>
@@ -1818,18 +1991,18 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.two,
     fontSize: 16,
   },
-  error: { color: '#e5484d' },
+  error: { color: "#e5484d" },
 });
 ```
 
 - [ ] **Step 2: Create `src/components/option-picker.tsx`**
 
 ```tsx
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Spacing } from "@/constants/theme";
 
 export interface Option<T extends string> {
   value: T;
@@ -1839,7 +2012,7 @@ export interface Option<T extends string> {
 interface OptionPickerProps<T extends string> {
   label: string;
   options: Option<T>[];
-  value: T | '';
+  value: T | "";
   onChange: (value: T) => void;
   error?: string;
 }
@@ -1860,11 +2033,18 @@ export function OptionPicker<T extends string>({
         {options.map((option) => {
           const selected = option.value === value;
           return (
-            <Pressable key={option.value} onPress={() => onChange(option.value)}>
+            <Pressable
+              key={option.value}
+              onPress={() => onChange(option.value)}
+            >
               <ThemedView
-                type={selected ? 'backgroundSelected' : 'backgroundElement'}
-                style={styles.chip}>
-                <ThemedText type="small" themeColor={selected ? 'text' : 'textSecondary'}>
+                type={selected ? "backgroundSelected" : "backgroundElement"}
+                style={styles.chip}
+              >
+                <ThemedText
+                  type="small"
+                  themeColor={selected ? "text" : "textSecondary"}
+                >
                   {option.label}
                 </ThemedText>
               </ThemedView>
@@ -1883,21 +2063,29 @@ export function OptionPicker<T extends string>({
 
 const styles = StyleSheet.create({
   container: { gap: Spacing.one },
-  row: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.two },
-  chip: { paddingVertical: Spacing.two, paddingHorizontal: Spacing.three, borderRadius: Spacing.three },
-  error: { color: '#e5484d' },
+  row: { flexDirection: "row", flexWrap: "wrap", gap: Spacing.two },
+  chip: {
+    paddingVertical: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    borderRadius: Spacing.three,
+  },
+  error: { color: "#e5484d" },
 });
 ```
 
 - [ ] **Step 3: Create `src/components/confirm.ts`**
 
 ```typescript
-import { Alert } from 'react-native';
+import { Alert } from "react-native";
 
-export function confirmDestructive(message: string, onConfirm: () => void, title = 'Are you sure?') {
+export function confirmDestructive(
+  message: string,
+  onConfirm: () => void,
+  title = "Are you sure?"
+) {
   Alert.alert(title, message, [
-    { text: 'Cancel', style: 'cancel' },
-    { text: 'Delete', style: 'destructive', onPress: onConfirm },
+    { text: "Cancel", style: "cancel" },
+    { text: "Delete", style: "destructive", onPress: onConfirm },
   ]);
 }
 ```
@@ -1919,6 +2107,7 @@ git commit -m "feat: add form field + confirm components"
 ## Task 22: Instrument form (shared new/edit) + routes
 
 **Files:**
+
 - Create: `src/features/instruments/instrument-form.tsx`
 - Create: `src/app/instrument/new.tsx`
 - Create: `src/app/instrument/edit/[id].tsx`
@@ -1926,21 +2115,24 @@ git commit -m "feat: add form field + confirm components"
 - [ ] **Step 1: Create `src/features/instruments/instrument-form.tsx`**
 
 ```tsx
-import { useState } from 'react';
-import { Button, StyleSheet } from 'react-native';
+import { useState } from "react";
+import { Button, StyleSheet } from "react-native";
 
-import { LabeledField } from '@/components/labeled-field';
-import { OptionPicker } from '@/components/option-picker';
-import { Screen } from '@/components/screen';
-import { ASSET_TYPES, ASSET_TYPE_LABELS, type AssetType } from '@/lib/types';
+import { LabeledField } from "@/components/labeled-field";
+import { OptionPicker } from "@/components/option-picker";
+import { Screen } from "@/components/screen";
+import { ASSET_TYPES, ASSET_TYPE_LABELS, type AssetType } from "@/lib/types";
 import {
   isValid,
   validateInstrument,
   type Errors,
   type InstrumentInput,
-} from '@/lib/validation';
+} from "@/lib/validation";
 
-const typeOptions = ASSET_TYPES.map((value) => ({ value, label: ASSET_TYPE_LABELS[value] }));
+const typeOptions = ASSET_TYPES.map((value) => ({
+  value,
+  label: ASSET_TYPE_LABELS[value],
+}));
 
 export interface InstrumentFormValues {
   name: string;
@@ -1955,9 +2147,14 @@ interface Props {
   onSubmit: (values: InstrumentFormValues) => void;
 }
 
-export function InstrumentForm({ initial, submitLabel, submitting, onSubmit }: Props) {
+export function InstrumentForm({
+  initial,
+  submitLabel,
+  submitting,
+  onSubmit,
+}: Props) {
   const [input, setInput] = useState<InstrumentInput>(
-    initial ?? { name: '', type: '', description: '' },
+    initial ?? { name: "", type: "", description: "" }
   );
   const [errors, setErrors] = useState<Errors<InstrumentInput>>({});
 
@@ -1965,7 +2162,11 @@ export function InstrumentForm({ initial, submitLabel, submitting, onSubmit }: P
     const nextErrors = validateInstrument(input);
     setErrors(nextErrors);
     if (!isValid(nextErrors)) return;
-    onSubmit({ name: input.name.trim(), type: input.type as AssetType, description: input.description.trim() });
+    onSubmit({
+      name: input.name.trim(),
+      type: input.type as AssetType,
+      description: input.description.trim(),
+    });
   }
 
   return (
@@ -1992,23 +2193,30 @@ export function InstrumentForm({ initial, submitLabel, submitting, onSubmit }: P
         multiline
         style={styles.multiline}
       />
-      <Button title={submitLabel} onPress={handleSubmit} disabled={submitting} />
+      <Button
+        title={submitLabel}
+        onPress={handleSubmit}
+        disabled={submitting}
+      />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  multiline: { minHeight: 80, textAlignVertical: 'top' },
+  multiline: { minHeight: 80, textAlignVertical: "top" },
 });
 ```
 
 - [ ] **Step 2: Create `src/app/instrument/new.tsx`**
 
 ```tsx
-import { router } from 'expo-router';
+import { router } from "expo-router";
 
-import { InstrumentForm, type InstrumentFormValues } from '@/features/instruments/instrument-form';
-import { useCreateInstrument } from '@/features/instruments/hooks';
+import {
+  InstrumentForm,
+  type InstrumentFormValues,
+} from "@/features/instruments/instrument-form";
+import { useCreateInstrument } from "@/features/instruments/hooks";
 
 export default function NewInstrumentScreen() {
   const { mutate, isPending } = useCreateInstrument();
@@ -2017,19 +2225,31 @@ export default function NewInstrumentScreen() {
     mutate(values, { onSuccess: () => router.back() });
   }
 
-  return <InstrumentForm submitLabel="Add Instrument" submitting={isPending} onSubmit={handleSubmit} />;
+  return (
+    <InstrumentForm
+      submitLabel="Add Instrument"
+      submitting={isPending}
+      onSubmit={handleSubmit}
+    />
+  );
 }
 ```
 
 - [ ] **Step 3: Create `src/app/instrument/edit/[id].tsx`**
 
 ```tsx
-import { router, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator } from 'react-native';
+import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator } from "react-native";
 
-import { Screen } from '@/components/screen';
-import { useInstrument, useUpdateInstrument } from '@/features/instruments/hooks';
-import { InstrumentForm, type InstrumentFormValues } from '@/features/instruments/instrument-form';
+import { Screen } from "@/components/screen";
+import {
+  useInstrument,
+  useUpdateInstrument,
+} from "@/features/instruments/hooks";
+import {
+  InstrumentForm,
+  type InstrumentFormValues,
+} from "@/features/instruments/instrument-form";
 
 export default function EditInstrumentScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -2048,7 +2268,7 @@ export default function EditInstrumentScreen() {
   function handleSubmit(values: InstrumentFormValues) {
     mutate(
       { id: instrumentId, input: values },
-      { onSuccess: () => router.back() },
+      { onSuccess: () => router.back() }
     );
   }
 
@@ -2057,7 +2277,7 @@ export default function EditInstrumentScreen() {
       initial={{
         name: instrument.name,
         type: instrument.type,
-        description: instrument.description ?? '',
+        description: instrument.description ?? "",
       }}
       submitLabel="Save Changes"
       submitting={saving}
@@ -2088,24 +2308,31 @@ git commit -m "feat: add instrument create/edit form and routes"
 ## Task 23: Portfolio list screen
 
 **Files:**
+
 - Replace: `src/app/(tabs)/portfolio.tsx`
 
 - [ ] **Step 1: Replace `src/app/(tabs)/portfolio.tsx`**
 
 ```tsx
-import { Link, router } from 'expo-router';
-import { ActivityIndicator, Button, Pressable, StyleSheet, View } from 'react-native';
+import { Link, router } from "expo-router";
+import {
+  ActivityIndicator,
+  Button,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 
-import { Card } from '@/components/card';
-import { EmptyState } from '@/components/empty-state';
-import { Screen } from '@/components/screen';
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { useInstruments } from '@/features/instruments/hooks';
-import { useAllTransactions } from '@/features/transactions/hooks';
-import { summarizeByInstrument } from '@/lib/aggregation';
-import { formatINR, formatQuantity } from '@/lib/format';
-import { ASSET_TYPE_LABELS } from '@/lib/types';
+import { Card } from "@/components/card";
+import { EmptyState } from "@/components/empty-state";
+import { Screen } from "@/components/screen";
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import { useInstruments } from "@/features/instruments/hooks";
+import { useAllTransactions } from "@/features/transactions/hooks";
+import { summarizeByInstrument } from "@/lib/aggregation";
+import { formatINR, formatQuantity } from "@/lib/format";
+import { ASSET_TYPE_LABELS } from "@/lib/types";
 
 export default function PortfolioScreen() {
   const { data: instruments, isPending: loadingInstruments } = useInstruments();
@@ -2125,14 +2352,21 @@ export default function PortfolioScreen() {
     <Screen>
       <View style={styles.header}>
         <ThemedText type="subtitle">Portfolio</ThemedText>
-        <Button title="Add" onPress={() => router.push('/instrument/new')} />
+        <Button title="Add" onPress={() => router.push("/instrument/new")} />
       </View>
 
       {rows.length === 0 ? (
-        <EmptyState title="No instruments yet" hint="Tap Add to create your first holding." />
+        <EmptyState
+          title="No instruments yet"
+          hint="Tap Add to create your first holding."
+        />
       ) : (
         rows.map(({ instrument, summary }) => (
-          <Link key={instrument.id} href={`/instrument/${instrument.id}`} asChild>
+          <Link
+            key={instrument.id}
+            href={`/instrument/${instrument.id}`}
+            asChild
+          >
             <Pressable>
               <Card>
                 <View style={styles.cardHeader}>
@@ -2145,7 +2379,9 @@ export default function PortfolioScreen() {
                   <ThemedText type="small" themeColor="textSecondary">
                     {formatQuantity(summary.totalUnits)} units
                   </ThemedText>
-                  <ThemedText type="smallBold">{formatINR(summary.totalInvested)}</ThemedText>
+                  <ThemedText type="smallBold">
+                    {formatINR(summary.totalInvested)}
+                  </ThemedText>
                 </View>
               </Card>
             </Pressable>
@@ -2157,8 +2393,16 @@ export default function PortfolioScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', gap: Spacing.two },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: Spacing.two,
+  },
 });
 ```
 
@@ -2166,6 +2410,7 @@ const styles = StyleSheet.create({
 
 Run: `npx expo start` → iOS simulator.
 Observe / do:
+
 - Portfolio tab shows "No instruments yet".
 - Tap **Add** → New Instrument modal opens.
 - Enter name, pick type, submit → returns to Portfolio, new card appears with ₹0.00 (no buys yet).
@@ -2183,6 +2428,7 @@ git commit -m "feat: portfolio list screen"
 ## Task 24: Transaction form (shared new/edit) + routes
 
 **Files:**
+
 - Create: `src/features/transactions/transaction-form.tsx`
 - Create: `src/app/transaction/new.tsx`
 - Create: `src/app/transaction/edit/[id].tsx`
@@ -2190,26 +2436,29 @@ git commit -m "feat: portfolio list screen"
 - [ ] **Step 1: Create `src/features/transactions/transaction-form.tsx`**
 
 ```tsx
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState } from 'react';
-import { Button, Platform, Pressable, StyleSheet } from 'react-native';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useState } from "react";
+import { Button, Platform, Pressable, StyleSheet } from "react-native";
 
-import { LabeledField } from '@/components/labeled-field';
-import { OptionPicker } from '@/components/option-picker';
-import { Screen } from '@/components/screen';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
-import { formatDate } from '@/lib/format';
-import { TX_KINDS, TX_KIND_LABELS, type TxKind } from '@/lib/types';
+import { LabeledField } from "@/components/labeled-field";
+import { OptionPicker } from "@/components/option-picker";
+import { Screen } from "@/components/screen";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Spacing } from "@/constants/theme";
+import { formatDate } from "@/lib/format";
+import { TX_KINDS, TX_KIND_LABELS, type TxKind } from "@/lib/types";
 import {
   isValid,
   validateTransaction,
   type Errors,
   type TransactionInput,
-} from '@/lib/validation';
+} from "@/lib/validation";
 
-const kindOptions = TX_KINDS.map((value) => ({ value, label: TX_KIND_LABELS[value] }));
+const kindOptions = TX_KINDS.map((value) => ({
+  value,
+  label: TX_KIND_LABELS[value],
+}));
 
 export interface TransactionFormValues {
   kind: TxKind;
@@ -2226,9 +2475,20 @@ interface Props {
   onSubmit: (values: TransactionFormValues) => void;
 }
 
-export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: Props) {
+export function TransactionForm({
+  initial,
+  submitLabel,
+  submitting,
+  onSubmit,
+}: Props) {
   const [input, setInput] = useState<TransactionInput>(
-    initial ?? { kind: '', pricePerUnit: '', quantity: '', date: Date.now(), note: '' },
+    initial ?? {
+      kind: "",
+      pricePerUnit: "",
+      quantity: "",
+      date: Date.now(),
+      note: "",
+    }
   );
   const [errors, setErrors] = useState<Errors<TransactionInput>>({});
   const [showPicker, setShowPicker] = useState(false);
@@ -2258,7 +2518,9 @@ export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: 
       <LabeledField
         label="Price per unit (₹)"
         value={input.pricePerUnit}
-        onChangeText={(pricePerUnit) => setInput((s) => ({ ...s, pricePerUnit }))}
+        onChangeText={(pricePerUnit) =>
+          setInput((s) => ({ ...s, pricePerUnit }))
+        }
         keyboardType="decimal-pad"
         placeholder="0.00"
         error={errors.pricePerUnit}
@@ -2278,7 +2540,7 @@ export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: 
       <Pressable onPress={() => setShowPicker(true)}>
         <ThemedView type="backgroundElement" style={styles.dateBox}>
           <ThemedText type="small">
-            {input.date != null ? formatDate(input.date) : 'Select date'}
+            {input.date != null ? formatDate(input.date) : "Select date"}
           </ThemedText>
         </ThemedView>
       </Pressable>
@@ -2292,7 +2554,7 @@ export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: 
           value={input.date != null ? new Date(input.date) : new Date()}
           mode="date"
           onChange={(_event, selected) => {
-            if (Platform.OS !== 'ios') setShowPicker(false);
+            if (Platform.OS !== "ios") setShowPicker(false);
             if (selected) setInput((s) => ({ ...s, date: selected.getTime() }));
           }}
         />
@@ -2305,14 +2567,18 @@ export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: 
         placeholder="e.g. monthly SIP installment"
       />
 
-      <Button title={submitLabel} onPress={handleSubmit} disabled={submitting} />
+      <Button
+        title={submitLabel}
+        onPress={handleSubmit}
+        disabled={submitting}
+      />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   dateBox: { padding: Spacing.three, borderRadius: Spacing.two },
-  error: { color: '#e5484d' },
+  error: { color: "#e5484d" },
 });
 ```
 
@@ -2326,13 +2592,13 @@ Then commit the dep bump with this task's final commit.
 - [ ] **Step 3: Create `src/app/transaction/new.tsx`**
 
 ```tsx
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from "expo-router";
 
-import { useCreateTransaction } from '@/features/transactions/hooks';
+import { useCreateTransaction } from "@/features/transactions/hooks";
 import {
   TransactionForm,
   type TransactionFormValues,
-} from '@/features/transactions/transaction-form';
+} from "@/features/transactions/transaction-form";
 
 export default function NewTransactionScreen() {
   const { instrumentId } = useLocalSearchParams<{ instrumentId: string }>();
@@ -2343,22 +2609,31 @@ export default function NewTransactionScreen() {
     mutate({ ...values, instrumentId: id }, { onSuccess: () => router.back() });
   }
 
-  return <TransactionForm submitLabel="Add Buy" submitting={isPending} onSubmit={handleSubmit} />;
+  return (
+    <TransactionForm
+      submitLabel="Add Buy"
+      submitting={isPending}
+      onSubmit={handleSubmit}
+    />
+  );
 }
 ```
 
 - [ ] **Step 4: Create `src/app/transaction/edit/[id].tsx`**
 
 ```tsx
-import { router, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator } from 'react-native';
+import { router, useLocalSearchParams } from "expo-router";
+import { ActivityIndicator } from "react-native";
 
-import { Screen } from '@/components/screen';
-import { useTransaction, useUpdateTransaction } from '@/features/transactions/hooks';
+import { Screen } from "@/components/screen";
+import {
+  useTransaction,
+  useUpdateTransaction,
+} from "@/features/transactions/hooks";
 import {
   TransactionForm,
   type TransactionFormValues,
-} from '@/features/transactions/transaction-form';
+} from "@/features/transactions/transaction-form";
 
 export default function EditTransactionScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -2375,7 +2650,10 @@ export default function EditTransactionScreen() {
   }
 
   function handleSubmit(values: TransactionFormValues) {
-    mutate({ id: transactionId, input: values }, { onSuccess: () => router.back() });
+    mutate(
+      { id: transactionId, input: values },
+      { onSuccess: () => router.back() }
+    );
   }
 
   return (
@@ -2385,7 +2663,7 @@ export default function EditTransactionScreen() {
         pricePerUnit: String(transaction.pricePerUnit),
         quantity: String(transaction.quantity),
         date: transaction.date,
-        note: transaction.note ?? '',
+        note: transaction.note ?? "",
       }}
       submitLabel="Save Changes"
       submitting={saving}
@@ -2412,26 +2690,39 @@ git commit -m "feat: add buy create/edit form, date picker, routes"
 ## Task 25: Instrument detail screen
 
 **Files:**
+
 - Create: `src/app/instrument/[id].tsx`
 
 - [ ] **Step 1: Create `src/app/instrument/[id].tsx`**
 
 ```tsx
-import { router, Stack, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, Button, Pressable, StyleSheet, View } from 'react-native';
+import { router, Stack, useLocalSearchParams } from "expo-router";
+import {
+  ActivityIndicator,
+  Button,
+  Pressable,
+  StyleSheet,
+  View,
+} from "react-native";
 
-import { Card } from '@/components/card';
-import { confirmDestructive } from '@/components/confirm';
-import { EmptyState } from '@/components/empty-state';
-import { Screen } from '@/components/screen';
-import { Stat } from '@/components/stat';
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { useDeleteInstrument, useInstrument } from '@/features/instruments/hooks';
-import { useDeleteTransaction, useTransactionsByInstrument } from '@/features/transactions/hooks';
-import { summarizeTransactions } from '@/lib/aggregation';
-import { formatDate, formatINR, formatQuantity } from '@/lib/format';
-import { ASSET_TYPE_LABELS, TX_KIND_LABELS } from '@/lib/types';
+import { Card } from "@/components/card";
+import { confirmDestructive } from "@/components/confirm";
+import { EmptyState } from "@/components/empty-state";
+import { Screen } from "@/components/screen";
+import { Stat } from "@/components/stat";
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import {
+  useDeleteInstrument,
+  useInstrument,
+} from "@/features/instruments/hooks";
+import {
+  useDeleteTransaction,
+  useTransactionsByInstrument,
+} from "@/features/transactions/hooks";
+import { summarizeTransactions } from "@/lib/aggregation";
+import { formatDate, formatINR, formatQuantity } from "@/lib/format";
+import { ASSET_TYPE_LABELS, TX_KIND_LABELS } from "@/lib/types";
 
 export default function InstrumentDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -2455,8 +2746,11 @@ export default function InstrumentDetailScreen() {
 
   function handleDeleteInstrument() {
     confirmDestructive(
-      'Deleting this instrument also deletes all its buys. This cannot be undone.',
-      () => deleteInstrument.mutate(instrumentId, { onSuccess: () => router.back() }),
+      "Deleting this instrument also deletes all its buys. This cannot be undone.",
+      () =>
+        deleteInstrument.mutate(instrumentId, {
+          onSuccess: () => router.back(),
+        })
     );
   }
 
@@ -2473,13 +2767,26 @@ export default function InstrumentDetailScreen() {
           <ThemedText type="small">{instrument.description}</ThemedText>
         ) : null}
         <View style={styles.stats}>
-          <Stat label="Total invested" value={formatINR(summary.totalInvested)} />
-          <Stat label="Total units" value={formatQuantity(summary.totalUnits)} />
+          <Stat
+            label="Total invested"
+            value={formatINR(summary.totalInvested)}
+          />
+          <Stat
+            label="Total units"
+            value={formatQuantity(summary.totalUnits)}
+          />
           <Stat label="Avg cost / unit" value={formatINR(summary.avgCost)} />
         </View>
         <View style={styles.actions}>
-          <Button title="Edit" onPress={() => router.push(`/instrument/edit/${instrumentId}`)} />
-          <Button title="Delete" color="#e5484d" onPress={handleDeleteInstrument} />
+          <Button
+            title="Edit"
+            onPress={() => router.push(`/instrument/edit/${instrumentId}`)}
+          />
+          <Button
+            title="Delete"
+            color="#e5484d"
+            onPress={handleDeleteInstrument}
+          />
         </View>
       </Card>
 
@@ -2487,19 +2794,31 @@ export default function InstrumentDetailScreen() {
         <ThemedText type="smallBold">Buys</ThemedText>
         <Button
           title="Add Buy"
-          onPress={() => router.push(`/transaction/new?instrumentId=${instrumentId}`)}
+          onPress={() =>
+            router.push(`/transaction/new?instrumentId=${instrumentId}`)
+          }
         />
       </View>
 
       {buys.length === 0 ? (
-        <EmptyState title="No buys yet" hint="Add your first lumpsum or SIP purchase." />
+        <EmptyState
+          title="No buys yet"
+          hint="Add your first lumpsum or SIP purchase."
+        />
       ) : (
         buys.map((buy) => (
-          <Pressable key={buy.id} onPress={() => router.push(`/transaction/edit/${buy.id}`)}>
+          <Pressable
+            key={buy.id}
+            onPress={() => router.push(`/transaction/edit/${buy.id}`)}
+          >
             <Card>
               <View style={styles.buyRow}>
-                <ThemedText type="smallBold">{TX_KIND_LABELS[buy.kind]}</ThemedText>
-                <ThemedText type="smallBold">{formatINR(buy.pricePerUnit * buy.quantity)}</ThemedText>
+                <ThemedText type="smallBold">
+                  {TX_KIND_LABELS[buy.kind]}
+                </ThemedText>
+                <ThemedText type="smallBold">
+                  {formatINR(buy.pricePerUnit * buy.quantity)}
+                </ThemedText>
               </View>
               <Stat label="Price / unit" value={formatINR(buy.pricePerUnit)} />
               <Stat label="Quantity" value={formatQuantity(buy.quantity)} />
@@ -2513,8 +2832,9 @@ export default function InstrumentDetailScreen() {
                 title="Delete buy"
                 color="#e5484d"
                 onPress={() =>
-                  confirmDestructive('Delete this buy? This cannot be undone.', () =>
-                    deleteTransaction.mutate({ id: buy.id, instrumentId }),
+                  confirmDestructive(
+                    "Delete this buy? This cannot be undone.",
+                    () => deleteTransaction.mutate({ id: buy.id, instrumentId })
                   )
                 }
               />
@@ -2528,9 +2848,17 @@ export default function InstrumentDetailScreen() {
 
 const styles = StyleSheet.create({
   stats: { gap: Spacing.one, marginTop: Spacing.two },
-  actions: { flexDirection: 'row', justifyContent: 'space-between', marginTop: Spacing.two },
-  buysHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  buyRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  actions: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: Spacing.two,
+  },
+  buysHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  buyRow: { flexDirection: "row", justifyContent: "space-between" },
 });
 ```
 
@@ -2543,6 +2871,7 @@ Expected: PASS.
 
 Run: `npx expo start` → iOS simulator.
 Do:
+
 - Portfolio → tap an instrument → detail shows header + "No buys yet".
 - **Add Buy** → pick kind, enter price + quantity, pick date, submit → returns to detail; buy appears; totals update (invested = price×qty, avg cost correct).
 - Add a second buy → totals aggregate; avg cost is weighted.
@@ -2562,27 +2891,35 @@ git commit -m "feat: instrument detail screen with buys and totals"
 ## Task 26: Dashboard screen
 
 **Files:**
+
 - Replace: `src/app/(tabs)/index.tsx`
 
 - [ ] **Step 1: Replace `src/app/(tabs)/index.tsx`**
 
 ```tsx
-import { router } from 'expo-router';
-import { ActivityIndicator, Button, StyleSheet, View } from 'react-native';
+import { router } from "expo-router";
+import { ActivityIndicator, Button, StyleSheet, View } from "react-native";
 
-import { BarBreakdown, type BreakdownSegment } from '@/components/bar-breakdown';
-import { Card } from '@/components/card';
-import { EmptyState } from '@/components/empty-state';
-import { Screen } from '@/components/screen';
-import { Stat } from '@/components/stat';
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { usePortfolioSummary } from '@/features/dashboard/hooks';
-import { formatINR } from '@/lib/format';
-import { ASSET_TYPE_LABELS, TX_KIND_LABELS } from '@/lib/types';
+import {
+  BarBreakdown,
+  type BreakdownSegment,
+} from "@/components/bar-breakdown";
+import { Card } from "@/components/card";
+import { EmptyState } from "@/components/empty-state";
+import { Screen } from "@/components/screen";
+import { Stat } from "@/components/stat";
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import { usePortfolioSummary } from "@/features/dashboard/hooks";
+import { formatINR } from "@/lib/format";
+import { ASSET_TYPE_LABELS, TX_KIND_LABELS } from "@/lib/types";
 
-const TYPE_COLORS = { stock: '#3c87f7', etf: '#30a46c', bond: '#e5a000' } as const;
-const KIND_COLORS = { lumpsum: '#8e4ec6', sip: '#e5484d' } as const;
+const TYPE_COLORS = {
+  stock: "#3c87f7",
+  etf: "#30a46c",
+  bond: "#e5a000",
+} as const;
+const KIND_COLORS = { lumpsum: "#8e4ec6", sip: "#e5484d" } as const;
 
 export default function DashboardScreen() {
   const { data: summary, isPending } = usePortfolioSummary();
@@ -2597,30 +2934,46 @@ export default function DashboardScreen() {
 
   const typeSegments: BreakdownSegment[] = (
     Object.keys(summary.byType) as (keyof typeof summary.byType)[]
-  ).map((type) => ({ label: ASSET_TYPE_LABELS[type], amount: summary.byType[type], color: TYPE_COLORS[type] }));
+  ).map((type) => ({
+    label: ASSET_TYPE_LABELS[type],
+    amount: summary.byType[type],
+    color: TYPE_COLORS[type],
+  }));
 
   const kindSegments: BreakdownSegment[] = (
     Object.keys(summary.byKind) as (keyof typeof summary.byKind)[]
-  ).map((kind) => ({ label: TX_KIND_LABELS[kind], amount: summary.byKind[kind], color: KIND_COLORS[kind] }));
+  ).map((kind) => ({
+    label: TX_KIND_LABELS[kind],
+    amount: summary.byKind[kind],
+    color: KIND_COLORS[kind],
+  }));
 
   return (
     <Screen>
       <View style={styles.header}>
         <ThemedText type="subtitle">Dashboard</ThemedText>
-        <Button title="Settings" onPress={() => router.push('/settings')} />
+        <Button title="Settings" onPress={() => router.push("/settings")} />
       </View>
 
       {summary.buyCount === 0 ? (
-        <EmptyState title="Nothing invested yet" hint="Add instruments and buys from the Portfolio tab." />
+        <EmptyState
+          title="Nothing invested yet"
+          hint="Add instruments and buys from the Portfolio tab."
+        />
       ) : (
         <>
           <Card>
             <ThemedText type="small" themeColor="textSecondary">
               Total invested
             </ThemedText>
-            <ThemedText type="title">{formatINR(summary.totalInvested)}</ThemedText>
+            <ThemedText type="title">
+              {formatINR(summary.totalInvested)}
+            </ThemedText>
             <View style={styles.counts}>
-              <Stat label="Instruments" value={String(summary.instrumentCount)} />
+              <Stat
+                label="Instruments"
+                value={String(summary.instrumentCount)}
+              />
               <Stat label="Buys" value={String(summary.buyCount)} />
             </View>
           </Card>
@@ -2641,7 +2994,11 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   counts: { gap: Spacing.one, marginTop: Spacing.two },
 });
 ```
@@ -2650,6 +3007,7 @@ const styles = StyleSheet.create({
 
 Run: `npx expo start` → iOS simulator.
 Observe:
+
 - With no data: "Nothing invested yet".
 - After adding buys: Total invested matches the sum of all buys; "By asset type" and "By kind" bars are proportional and percentages sum to ~100%.
 - Adding/deleting a buy updates the dashboard (query invalidation working).
@@ -2666,18 +3024,19 @@ git commit -m "feat: dashboard with totals and breakdowns"
 ## Task 27: Backup/export + settings screen
 
 **Files:**
+
 - Create: `src/lib/backup.ts`
 - Create: `src/app/settings.tsx`
 
 - [ ] **Step 1: Create `src/lib/backup.ts`**
 
 ```typescript
-import { File, Paths } from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
+import { File, Paths } from "expo-file-system";
+import * as Sharing from "expo-sharing";
 
-import { listInstruments } from '@/db/repositories/instruments';
-import { listAllTransactions } from '@/db/repositories/transactions';
-import { buildTransactionsCsv } from '@/lib/csv';
+import { listInstruments } from "@/db/repositories/instruments";
+import { listAllTransactions } from "@/db/repositories/transactions";
+import { buildTransactionsCsv } from "@/lib/csv";
 
 async function loadAll() {
   const [instruments, transactions] = await Promise.all([
@@ -2687,14 +3046,23 @@ async function loadAll() {
   return { instruments, transactions };
 }
 
-async function writeAndShare(name: string, contents: string, mimeType: string, uti: string) {
+async function writeAndShare(
+  name: string,
+  contents: string,
+  mimeType: string,
+  uti: string
+) {
   const file = new File(Paths.document, name);
   if (file.exists) file.delete();
   file.create();
   file.write(contents);
 
   if (await Sharing.isAvailableAsync()) {
-    await Sharing.shareAsync(file.uri, { mimeType, dialogTitle: 'Export finance data', UTI: uti });
+    await Sharing.shareAsync(file.uri, {
+      mimeType,
+      dialogTitle: "Export finance data",
+      UTI: uti,
+    });
   }
   return file.uri;
 }
@@ -2703,31 +3071,36 @@ export async function exportJson(): Promise<string> {
   const data = await loadAll();
   const payload = { version: 1, exportedAt: Date.now(), ...data };
   return writeAndShare(
-    'finance-export.json',
+    "finance-export.json",
     JSON.stringify(payload, null, 2),
-    'application/json',
-    'public.json',
+    "application/json",
+    "public.json"
   );
 }
 
 export async function exportCsv(): Promise<string> {
   const { instruments, transactions } = await loadAll();
   const csv = buildTransactionsCsv(instruments, transactions);
-  return writeAndShare('finance-export.csv', csv, 'text/csv', 'public.comma-separated-values-text');
+  return writeAndShare(
+    "finance-export.csv",
+    csv,
+    "text/csv",
+    "public.comma-separated-values-text"
+  );
 }
 ```
 
 - [ ] **Step 2: Create `src/app/settings.tsx`**
 
 ```tsx
-import { useState } from 'react';
-import { Alert, Button, StyleSheet, View } from 'react-native';
+import { useState } from "react";
+import { Alert, Button, StyleSheet, View } from "react-native";
 
-import { Card } from '@/components/card';
-import { Screen } from '@/components/screen';
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { exportCsv, exportJson } from '@/lib/backup';
+import { Card } from "@/components/card";
+import { Screen } from "@/components/screen";
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import { exportCsv, exportJson } from "@/lib/backup";
 
 export default function SettingsScreen() {
   const [busy, setBusy] = useState(false);
@@ -2737,7 +3110,10 @@ export default function SettingsScreen() {
       setBusy(true);
       await action();
     } catch (error) {
-      Alert.alert('Export failed', error instanceof Error ? error.message : 'Unknown error');
+      Alert.alert(
+        "Export failed",
+        error instanceof Error ? error.message : "Unknown error"
+      );
     } finally {
       setBusy(false);
     }
@@ -2748,11 +3124,20 @@ export default function SettingsScreen() {
       <Card>
         <ThemedText type="smallBold">Backup / Export</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          Export your data to a file you can save or share. Data lives only on this device.
+          Export your data to a file you can save or share. Data lives only on
+          this device.
         </ThemedText>
         <View style={styles.buttons}>
-          <Button title="Export JSON" disabled={busy} onPress={() => run(exportJson)} />
-          <Button title="Export CSV" disabled={busy} onPress={() => run(exportCsv)} />
+          <Button
+            title="Export JSON"
+            disabled={busy}
+            onPress={() => run(exportJson)}
+          />
+          <Button
+            title="Export CSV"
+            disabled={busy}
+            onPress={() => run(exportCsv)}
+          />
         </View>
       </Card>
     </Screen>
@@ -2773,6 +3158,7 @@ Expected: PASS.
 
 Run: `npx expo start` → iOS simulator.
 Do:
+
 - Dashboard → **Settings** → **Export JSON** → the iOS share sheet appears with `finance-export.json`.
 - **Export CSV** → share sheet appears with `finance-export.csv`.
 - (Save to Files or copy; open to confirm contents include your instruments/buys.)
@@ -2789,6 +3175,7 @@ git commit -m "feat: JSON/CSV export and settings screen"
 ## Task 28: Cleanup demo assets + final verification
 
 **Files:**
+
 - Delete unused template demo files (only those no longer referenced).
 
 - [ ] **Step 1: Find remaining references to demo components**
@@ -2819,6 +3206,7 @@ Expected: no errors (fix any import-order/unused warnings surfaced).
 - [ ] **Step 5: Full manual regression on simulator**
 
 Run: `npx expo start` → iOS simulator. Walk the full flow:
+
 1. Fresh boot → migrations run → Dashboard "Nothing invested yet".
 2. Portfolio → Add instrument (each type: stock, ETF, bond).
 3. Add lumpsum + SIP buys to instruments.
@@ -2840,6 +3228,7 @@ git commit -m "chore: remove unused demo components; final cleanup"
 ## Self-Review
 
 **Spec coverage:**
+
 - Cost tracking only → no price/valuation fields anywhere ✅ (schema Task 8)
 - Local expo-sqlite → Tasks 1, 10 ✅
 - Drizzle ORM + migrations → Tasks 2, 8, 9, 14 ✅

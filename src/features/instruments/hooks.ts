@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   createInstrument,
@@ -6,14 +6,17 @@ import {
   getInstrument,
   listInstruments,
   updateInstrument,
-} from '@/db/repositories/instruments';
-import type { Instrument, NewInstrument } from '@/db/schema';
-import { queryKeys } from '@/lib/query';
+} from "@/db/repositories/instruments";
+import type { Instrument, NewInstrument } from "@/db/schema";
+import { queryKeys } from "@/lib/query";
 
-type InstrumentFields = Omit<NewInstrument, 'id' | 'createdAt' | 'updatedAt'>;
+type InstrumentFields = Omit<NewInstrument, "id" | "createdAt" | "updatedAt">;
 
 export function useInstruments() {
-  return useQuery({ queryKey: queryKeys.instruments, queryFn: listInstruments });
+  return useQuery({
+    queryKey: queryKeys.instruments,
+    queryFn: listInstruments,
+  });
 }
 
 export function useInstrument(id: number) {
@@ -37,8 +40,13 @@ export function useCreateInstrument() {
 export function useUpdateInstrument() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, input }: { id: number; input: Partial<InstrumentFields> }) =>
-      updateInstrument(id, input),
+    mutationFn: ({
+      id,
+      input,
+    }: {
+      id: number;
+      input: Partial<InstrumentFields>;
+    }) => updateInstrument(id, input),
     onSuccess: (row: Instrument) => {
       qc.invalidateQueries({ queryKey: queryKeys.instruments });
       qc.invalidateQueries({ queryKey: queryKeys.instrument(row.id) });

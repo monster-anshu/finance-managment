@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import { Alert, Button, StyleSheet, View } from 'react-native';
+import { useState } from "react";
+import { Alert, Button, StyleSheet, View } from "react-native";
 
-import { Card } from '@/components/card';
-import { Screen } from '@/components/screen';
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { exportCsv, exportJson } from '@/lib/backup';
+import { Card } from "@/components/card";
+import { Screen } from "@/components/screen";
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import { exportCsv, exportJson } from "@/lib/backup";
 
 export default function SettingsScreen() {
   const [busy, setBusy] = useState(false);
@@ -15,7 +15,10 @@ export default function SettingsScreen() {
       setBusy(true);
       await action();
     } catch (error) {
-      Alert.alert('Export failed', error instanceof Error ? error.message : 'Unknown error');
+      Alert.alert(
+        "Export failed",
+        error instanceof Error ? error.message : "Unknown error"
+      );
     } finally {
       setBusy(false);
     }
@@ -26,11 +29,20 @@ export default function SettingsScreen() {
       <Card>
         <ThemedText type="smallBold">Backup / Export</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
-          Export your data to a file you can save or share. Data lives only on this device.
+          Export your data to a file you can save or share. Data lives only on
+          this device.
         </ThemedText>
         <View style={styles.buttons}>
-          <Button title="Export JSON" disabled={busy} onPress={() => run(exportJson)} />
-          <Button title="Export CSV" disabled={busy} onPress={() => run(exportCsv)} />
+          <Button
+            title="Export JSON"
+            disabled={busy}
+            onPress={() => run(exportJson)}
+          />
+          <Button
+            title="Export CSV"
+            disabled={busy}
+            onPress={() => run(exportCsv)}
+          />
         </View>
       </Card>
     </Screen>

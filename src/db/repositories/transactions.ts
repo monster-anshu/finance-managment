@@ -1,13 +1,19 @@
-import { desc, eq } from 'drizzle-orm';
+import { desc, eq } from "drizzle-orm";
 
-import { db } from '@/db/client';
-import { transactions, type NewTransaction, type Transaction } from '@/db/schema';
+import { db } from "@/db/client";
+import {
+  transactions,
+  type NewTransaction,
+  type Transaction,
+} from "@/db/schema";
 
 export function listAllTransactions(): Promise<Transaction[]> {
   return db.select().from(transactions);
 }
 
-export function listTransactionsByInstrument(instrumentId: number): Promise<Transaction[]> {
+export function listTransactionsByInstrument(
+  instrumentId: number
+): Promise<Transaction[]> {
   return db
     .select()
     .from(transactions)
@@ -15,13 +21,19 @@ export function listTransactionsByInstrument(instrumentId: number): Promise<Tran
     .orderBy(desc(transactions.date));
 }
 
-export async function getTransaction(id: number): Promise<Transaction | undefined> {
-  const rows = await db.select().from(transactions).where(eq(transactions.id, id)).limit(1);
+export async function getTransaction(
+  id: number
+): Promise<Transaction | undefined> {
+  const rows = await db
+    .select()
+    .from(transactions)
+    .where(eq(transactions.id, id))
+    .limit(1);
   return rows[0];
 }
 
 export async function createTransaction(
-  input: Omit<NewTransaction, 'id' | 'createdAt' | 'updatedAt'>,
+  input: Omit<NewTransaction, "id" | "createdAt" | "updatedAt">
 ): Promise<Transaction> {
   const now = Date.now();
   const [row] = await db
@@ -33,7 +45,7 @@ export async function createTransaction(
 
 export async function updateTransaction(
   id: number,
-  input: Partial<Omit<NewTransaction, 'id' | 'createdAt' | 'updatedAt'>>,
+  input: Partial<Omit<NewTransaction, "id" | "createdAt" | "updatedAt">>
 ): Promise<Transaction> {
   const [row] = await db
     .update(transactions)

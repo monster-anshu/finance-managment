@@ -1,8 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Spacing } from "@/constants/theme";
 
 export function EmptyState({ title, hint }: { title: string; hint?: string }) {
   return (
@@ -18,6 +18,10 @@ export function EmptyState({ title, hint }: { title: string; hint?: string }) {
 }
 
 const styles = StyleSheet.create({
-  container: { alignItems: 'center', paddingVertical: Spacing.five, gap: Spacing.one },
-  hint: { textAlign: 'center' },
+  container: {
+    alignItems: "center",
+    paddingVertical: Spacing.five,
+    gap: Spacing.one,
+  },
+  hint: { textAlign: "center" },
 });

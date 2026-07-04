@@ -1,10 +1,10 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from "expo-router";
 
-import { useCreateTransaction } from '@/features/transactions/hooks';
+import { useCreateTransaction } from "@/features/transactions/hooks";
 import {
   TransactionForm,
   type TransactionFormValues,
-} from '@/features/transactions/transaction-form';
+} from "@/features/transactions/transaction-form";
 
 export default function NewTransactionScreen() {
   const { instrumentId } = useLocalSearchParams<{ instrumentId: string }>();
@@ -15,5 +15,11 @@ export default function NewTransactionScreen() {
     mutate({ ...values, instrumentId: id }, { onSuccess: () => router.back() });
   }
 
-  return <TransactionForm submitLabel="Add Buy" submitting={isPending} onSubmit={handleSubmit} />;
+  return (
+    <TransactionForm
+      submitLabel="Add Buy"
+      submitting={isPending}
+      onSubmit={handleSubmit}
+    />
+  );
 }

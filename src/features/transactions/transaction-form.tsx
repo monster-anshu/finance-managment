@@ -1,23 +1,26 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { useState } from 'react';
-import { Button, Platform, Pressable, StyleSheet } from 'react-native';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useState } from "react";
+import { Button, Platform, Pressable, StyleSheet } from "react-native";
 
-import { LabeledField } from '@/components/labeled-field';
-import { OptionPicker } from '@/components/option-picker';
-import { Screen } from '@/components/screen';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Spacing } from '@/constants/theme';
-import { formatDate } from '@/lib/format';
-import { TX_KINDS, TX_KIND_LABELS, type TxKind } from '@/lib/types';
+import { LabeledField } from "@/components/labeled-field";
+import { OptionPicker } from "@/components/option-picker";
+import { Screen } from "@/components/screen";
+import { ThemedText } from "@/components/themed-text";
+import { ThemedView } from "@/components/themed-view";
+import { Spacing } from "@/constants/theme";
+import { formatDate } from "@/lib/format";
+import { TX_KINDS, TX_KIND_LABELS, type TxKind } from "@/lib/types";
 import {
   isValid,
   validateTransaction,
   type Errors,
   type TransactionInput,
-} from '@/lib/validation';
+} from "@/lib/validation";
 
-const kindOptions = TX_KINDS.map((value) => ({ value, label: TX_KIND_LABELS[value] }));
+const kindOptions = TX_KINDS.map((value) => ({
+  value,
+  label: TX_KIND_LABELS[value],
+}));
 
 export interface TransactionFormValues {
   kind: TxKind;
@@ -34,9 +37,21 @@ interface Props {
   onSubmit: (values: TransactionFormValues) => void;
 }
 
-export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: Props) {
+export function TransactionForm({
+  initial,
+  submitLabel,
+  submitting,
+  onSubmit,
+}: Props) {
   const [input, setInput] = useState<TransactionInput>(
-    () => initial ?? { kind: '', pricePerUnit: '', quantity: '', date: Date.now(), note: '' },
+    () =>
+      initial ?? {
+        kind: "",
+        pricePerUnit: "",
+        quantity: "",
+        date: Date.now(),
+        note: "",
+      }
   );
   const [errors, setErrors] = useState<Errors<TransactionInput>>({});
   const [showPicker, setShowPicker] = useState(false);
@@ -66,7 +81,9 @@ export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: 
       <LabeledField
         label="Price per unit (₹)"
         value={input.pricePerUnit}
-        onChangeText={(pricePerUnit) => setInput((s) => ({ ...s, pricePerUnit }))}
+        onChangeText={(pricePerUnit) =>
+          setInput((s) => ({ ...s, pricePerUnit }))
+        }
         keyboardType="decimal-pad"
         placeholder="0.00"
         error={errors.pricePerUnit}
@@ -86,7 +103,7 @@ export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: 
       <Pressable onPress={() => setShowPicker(true)}>
         <ThemedView type="backgroundElement" style={styles.dateBox}>
           <ThemedText type="small">
-            {input.date != null ? formatDate(input.date) : 'Select date'}
+            {input.date != null ? formatDate(input.date) : "Select date"}
           </ThemedText>
         </ThemedView>
       </Pressable>
@@ -100,7 +117,7 @@ export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: 
           value={input.date != null ? new Date(input.date) : new Date()}
           mode="date"
           onChange={(_event, selected) => {
-            if (Platform.OS !== 'ios') setShowPicker(false);
+            if (Platform.OS !== "ios") setShowPicker(false);
             if (selected) setInput((s) => ({ ...s, date: selected.getTime() }));
           }}
         />
@@ -113,12 +130,16 @@ export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: 
         placeholder="e.g. monthly SIP installment"
       />
 
-      <Button title={submitLabel} onPress={handleSubmit} disabled={submitting} />
+      <Button
+        title={submitLabel}
+        onPress={handleSubmit}
+        disabled={submitting}
+      />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   dateBox: { padding: Spacing.three, borderRadius: Spacing.two },
-  error: { color: '#e5484d' },
+  error: { color: "#e5484d" },
 });

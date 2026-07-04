@@ -1,4 +1,4 @@
-import { ASSET_TYPES, TX_KINDS, type AssetType, type TxKind } from './types';
+import { ASSET_TYPES, TX_KINDS, type AssetType, type TxKind } from "./types";
 
 export interface AggInstrument {
   id: number;
@@ -27,13 +27,15 @@ export interface PortfolioSummary {
   buyCount: number;
 }
 
-export interface InstrumentWithSummary<T extends AggInstrument = AggInstrument> {
+export interface InstrumentWithSummary<
+  T extends AggInstrument = AggInstrument,
+> {
   instrument: T;
   summary: InstrumentSummary;
 }
 
 export function summarizeTransactions(
-  txns: Pick<AggTransaction, 'pricePerUnit' | 'quantity'>[],
+  txns: Pick<AggTransaction, "pricePerUnit" | "quantity">[]
 ): InstrumentSummary {
   let totalUnits = 0;
   let totalInvested = 0;
@@ -50,10 +52,16 @@ export function summarizeTransactions(
 
 export function summarizePortfolio(
   instruments: AggInstrument[],
-  txns: AggTransaction[],
+  txns: AggTransaction[]
 ): PortfolioSummary {
-  const byType = Object.fromEntries(ASSET_TYPES.map((t) => [t, 0])) as Record<AssetType, number>;
-  const byKind = Object.fromEntries(TX_KINDS.map((k) => [k, 0])) as Record<TxKind, number>;
+  const byType = Object.fromEntries(ASSET_TYPES.map((t) => [t, 0])) as Record<
+    AssetType,
+    number
+  >;
+  const byKind = Object.fromEntries(TX_KINDS.map((k) => [k, 0])) as Record<
+    TxKind,
+    number
+  >;
   const typeById = new Map(instruments.map((i) => [i.id, i.type]));
 
   let totalInvested = 0;
@@ -76,7 +84,7 @@ export function summarizePortfolio(
 
 export function summarizeByInstrument<T extends AggInstrument>(
   instruments: T[],
-  txns: AggTransaction[],
+  txns: AggTransaction[]
 ): InstrumentWithSummary<T>[] {
   const byInstrument = new Map<number, AggTransaction[]>();
   for (const t of txns) {

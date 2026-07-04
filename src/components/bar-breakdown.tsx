@@ -1,8 +1,8 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from "react-native";
 
-import { ThemedText } from '@/components/themed-text';
-import { Spacing } from '@/constants/theme';
-import { formatINR } from '@/lib/format';
+import { ThemedText } from "@/components/themed-text";
+import { Spacing } from "@/constants/theme";
+import { formatINR } from "@/lib/format";
 
 export interface BreakdownSegment {
   label: string;
@@ -27,7 +27,10 @@ export function BarBreakdown({ segments }: { segments: BreakdownSegment[] }) {
             </View>
             <View style={styles.track}>
               <View
-                style={[styles.fill, { width: `${pct}%`, backgroundColor: segment.color }]}
+                style={[
+                  styles.fill,
+                  { width: `${pct}%`, backgroundColor: segment.color },
+                ]}
               />
             </View>
           </View>
@@ -40,12 +43,12 @@ export function BarBreakdown({ segments }: { segments: BreakdownSegment[] }) {
 const styles = StyleSheet.create({
   container: { gap: Spacing.three },
   row: { gap: Spacing.one },
-  labelRow: { flexDirection: 'row', justifyContent: 'space-between' },
+  labelRow: { flexDirection: "row", justifyContent: "space-between" },
   track: {
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'rgba(127,127,127,0.2)',
-    overflow: 'hidden',
+    backgroundColor: "rgba(127,127,127,0.2)",
+    overflow: "hidden",
   },
   fill: { height: 8, borderRadius: 4 },
 });
