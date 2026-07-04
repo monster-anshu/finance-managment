@@ -12,7 +12,7 @@ import { usePortfolioSummary } from '@/features/dashboard/hooks';
 import { formatINR } from '@/lib/format';
 import { ASSET_TYPE_LABELS, TX_KIND_LABELS } from '@/lib/types';
 
-const TYPE_COLORS = { stock: '#3c87f7', etf: '#30a46c', bond: '#e5a000' } as const;
+const TYPE_COLORS = { stock: '#3c87f7', etf: '#30a46c', bond: '#e5a000', fd: '#00a2c7' } as const;
 const KIND_COLORS = { lumpsum: '#8e4ec6', sip: '#e5484d' } as const;
 
 export default function DashboardScreen() {

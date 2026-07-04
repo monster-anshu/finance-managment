@@ -36,7 +36,7 @@ describe('summarizePortfolio', () => {
   it('totals invested and breaks down by type and kind', () => {
     const p = summarizePortfolio(instruments, txns);
     expect(p.totalInvested).toBe(1800);
-    expect(p.byType).toEqual({ stock: 200, etf: 1600, bond: 0 });
+    expect(p.byType).toEqual({ stock: 200, etf: 1600, bond: 0, fd: 0 });
     expect(p.byKind).toEqual({ lumpsum: 200, sip: 1600 });
     expect(p.instrumentCount).toBe(2);
     expect(p.buyCount).toBe(3);
