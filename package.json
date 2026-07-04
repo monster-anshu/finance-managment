@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~57.0.3",
+    "@react-native-community/datetimepicker": "9.1.0",
     "@tanstack/react-query": "^5.101.2",
     "drizzle-orm": "^0.45.2",
     "expo": "~57.0.2",
@@ -53,7 +54,9 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "testMatch": ["**/src/**/*.test.ts"],
+    "testMatch": [
+      "**/src/**/*.test.ts"
+    ],
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
     }
