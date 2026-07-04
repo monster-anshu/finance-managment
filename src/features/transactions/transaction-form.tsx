@@ -36,7 +36,7 @@ interface Props {
 
 export function TransactionForm({ initial, submitLabel, submitting, onSubmit }: Props) {
   const [input, setInput] = useState<TransactionInput>(
-    initial ?? { kind: '', pricePerUnit: '', quantity: '', date: Date.now(), note: '' },
+    () => initial ?? { kind: '', pricePerUnit: '', quantity: '', date: Date.now(), note: '' },
   );
   const [errors, setErrors] = useState<Errors<TransactionInput>>({});
   const [showPicker, setShowPicker] = useState(false);
