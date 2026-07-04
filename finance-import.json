@@ -1,0 +1,348 @@
+{
+  "version": 1,
+  "exportedAt": 1783123200000,
+  "instruments": [
+    {
+      "id": 1,
+      "name": "SGB (1 gram)",
+      "type": "bond",
+      "description": "SGB2308441998309324257",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 2,
+      "name": "SGB (10 gram)",
+      "type": "bond",
+      "description": "SGB24124218151222436741",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 3,
+      "name": "Bandhan SIP",
+      "type": "etf",
+      "description": "Mutual fund (mapped to ETF)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 4,
+      "name": "Quant SIP",
+      "type": "etf",
+      "description": "Mutual fund (mapped to ETF)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 5,
+      "name": "Parag Parikh",
+      "type": "etf",
+      "description": "Mutual fund (mapped to ETF)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 6,
+      "name": "Bitcoin",
+      "type": "etf",
+      "description": "Crypto (mapped to ETF)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 7,
+      "name": "Gold Fund",
+      "type": "etf",
+      "description": "Gold fund (mapped to ETF)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 8,
+      "name": "Silver",
+      "type": "etf",
+      "description": "Silver (mapped to ETF)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 9,
+      "name": "Defence ETF",
+      "type": "etf",
+      "description": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 10,
+      "name": "IRFC",
+      "type": "stock",
+      "description": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 11,
+      "name": "Tata Motors",
+      "type": "stock",
+      "description": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 12,
+      "name": "Castrol",
+      "type": "stock",
+      "description": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 13,
+      "name": "Airtel Finance FD",
+      "type": "fd",
+      "description": "Suryoday Small Finance Bank",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 14,
+      "name": "Utkarsh Bank FD",
+      "type": "fd",
+      "description": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 15,
+      "name": "Groww Nifty EV (NFO)",
+      "type": "etf",
+      "description": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "instrumentId": 1,
+      "kind": "lumpsum",
+      "pricePerUnit": 5561,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 2,
+      "instrumentId": 2,
+      "kind": "lumpsum",
+      "pricePerUnit": 6213,
+      "quantity": 10,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 3,
+      "instrumentId": 3,
+      "kind": "lumpsum",
+      "pricePerUnit": 84000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": "Initial investment (84k)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 4,
+      "instrumentId": 3,
+      "kind": "sip",
+      "pricePerUnit": 7000,
+      "quantity": 13,
+      "date": 1783123200000,
+      "note": "₹7,000 × 13 monthly SIP",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 5,
+      "instrumentId": 4,
+      "kind": "lumpsum",
+      "pricePerUnit": 80000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": "Initial investment (80k)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 6,
+      "instrumentId": 4,
+      "kind": "sip",
+      "pricePerUnit": 7000,
+      "quantity": 13,
+      "date": 1783123200000,
+      "note": "₹7,000 × 13 monthly SIP",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 7,
+      "instrumentId": 5,
+      "kind": "lumpsum",
+      "pricePerUnit": 75000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": "Initial SIP investment (75k)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 8,
+      "instrumentId": 5,
+      "kind": "sip",
+      "pricePerUnit": 7000,
+      "quantity": 13,
+      "date": 1783123200000,
+      "note": "₹7,000 × 13 monthly SIP",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 9,
+      "instrumentId": 5,
+      "kind": "lumpsum",
+      "pricePerUnit": 80000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": "Additional lumpsum (80k)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 10,
+      "instrumentId": 6,
+      "kind": "lumpsum",
+      "pricePerUnit": 100,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 11,
+      "instrumentId": 7,
+      "kind": "sip",
+      "pricePerUnit": 7000,
+      "quantity": 11,
+      "date": 1783123200000,
+      "note": "₹7,000 × 11 monthly SIP",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 12,
+      "instrumentId": 7,
+      "kind": "lumpsum",
+      "pricePerUnit": 250000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": "Lumpsum (2.5 lakh)",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 13,
+      "instrumentId": 8,
+      "kind": "lumpsum",
+      "pricePerUnit": 3500,
+      "quantity": 71.42857142857143,
+      "date": 1783123200000,
+      "note": "₹2.5 lakh @ ₹3,500/unit",
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 14,
+      "instrumentId": 9,
+      "kind": "lumpsum",
+      "pricePerUnit": 20000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 15,
+      "instrumentId": 10,
+      "kind": "lumpsum",
+      "pricePerUnit": 214.4,
+      "quantity": 51,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 16,
+      "instrumentId": 11,
+      "kind": "lumpsum",
+      "pricePerUnit": 822.65,
+      "quantity": 10,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 17,
+      "instrumentId": 12,
+      "kind": "lumpsum",
+      "pricePerUnit": 222.9,
+      "quantity": 150,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 18,
+      "instrumentId": 13,
+      "kind": "lumpsum",
+      "pricePerUnit": 120000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 19,
+      "instrumentId": 14,
+      "kind": "lumpsum",
+      "pricePerUnit": 125000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    },
+    {
+      "id": 20,
+      "instrumentId": 15,
+      "kind": "lumpsum",
+      "pricePerUnit": 5000,
+      "quantity": 1,
+      "date": 1783123200000,
+      "note": null,
+      "createdAt": 1783123200000,
+      "updatedAt": 1783123200000
+    }
+  ]
+}

@@ -5,7 +5,8 @@ import { Card } from "@/components/card";
 import { Screen } from "@/components/screen";
 import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
-import { exportCsv, exportJson } from "@/lib/backup";
+import { exportCsv, exportJson, importBackup } from "@/lib/backup";
+import { queryClient } from "@/lib/query";
 
 export default function SettingsScreen() {
   const [busy, setBusy] = useState(false);
@@ -17,6 +18,26 @@ export default function SettingsScreen() {
     } catch (error) {
       Alert.alert(
         "Export failed",
+        error instanceof Error ? error.message : "Unknown error"
+      );
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleImport() {
+    try {
+      setBusy(true);
+      const result = await importBackup();
+      if (!result) return; // user cancelled the picker
+      await queryClient.invalidateQueries();
+      Alert.alert(
+        "Import complete",
+        `Added ${result.instruments} instruments and ${result.transactions} buys.`
+      );
+    } catch (error) {
+      Alert.alert(
+        "Import failed",
         error instanceof Error ? error.message : "Unknown error"
       );
     } finally {
@@ -43,6 +64,17 @@ export default function SettingsScreen() {
             disabled={busy}
             onPress={() => run(exportCsv)}
           />
+        </View>
+      </Card>
+
+      <Card>
+        <ThemedText type="smallBold">Import / Restore</ThemedText>
+        <ThemedText type="small" themeColor="textSecondary">
+          Import instruments and buys from an exported JSON file. Imported
+          records are added to your existing data.
+        </ThemedText>
+        <View style={styles.buttons}>
+          <Button title="Import JSON" disabled={busy} onPress={handleImport} />
         </View>
       </Card>
     </Screen>
