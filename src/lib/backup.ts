@@ -1,3 +1,4 @@
+import Constants, { ExecutionEnvironment } from "expo-constants";
 import * as DocumentPicker from "expo-document-picker";
 import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
@@ -71,6 +72,15 @@ export interface ImportResult {
  * the file are remapped to freshly-inserted ids. Returns null if cancelled.
  */
 export async function importBackup(): Promise<ImportResult | null> {
+  // Expo Go sandboxes the filesystem to its scoped experience directory, so it
+  // cannot read the copy DocumentPicker drops in /cache/DocumentPicker/. This
+  // works in a development/standalone build (the installed APK), not Expo Go.
+  if (Constants.executionEnvironment === ExecutionEnvironment.StoreClient) {
+    throw new Error(
+      "Import isn't supported in Expo Go. Open the installed app (your dev/APK build) and try again."
+    );
+  }
+
   const result = await DocumentPicker.getDocumentAsync({
     type: "application/json",
     copyToCacheDirectory: true,

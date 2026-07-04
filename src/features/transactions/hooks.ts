@@ -29,7 +29,7 @@ export function useTransactionsByInstrument(instrumentId: number) {
 
 export function useTransaction(id: number) {
   return useQuery({
-    queryKey: ["transaction", id],
+    queryKey: queryKeys.transaction(id),
     queryFn: () => getTransaction(id),
   });
 }
@@ -64,8 +64,10 @@ export function useUpdateTransaction() {
       id: number;
       input: Partial<TransactionFields>;
     }) => updateTransaction(id, input),
-    onSuccess: (row: Transaction) =>
-      invalidateForInstrument(qc, row.instrumentId),
+    onSuccess: (row: Transaction) => {
+      qc.invalidateQueries({ queryKey: queryKeys.transaction(row.id) });
+      invalidateForInstrument(qc, row.instrumentId);
+    },
   });
 }
 

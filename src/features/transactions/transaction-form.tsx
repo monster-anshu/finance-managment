@@ -56,6 +56,14 @@ export function TransactionForm({
   const [errors, setErrors] = useState<Errors<TransactionInput>>({});
   const [showPicker, setShowPicker] = useState(false);
 
+  function incrementQuantity() {
+    setInput((s) => {
+      const current = Number(s.quantity);
+      const next = Number.isFinite(current) ? current + 1 : 1;
+      return { ...s, quantity: String(next) };
+    });
+  }
+
   function handleSubmit() {
     const nextErrors = validateTransaction(input);
     setErrors(nextErrors);
@@ -95,6 +103,17 @@ export function TransactionForm({
         keyboardType="decimal-pad"
         placeholder="0"
         error={errors.quantity}
+        rightAdornment={
+          <Pressable
+            onPress={incrementQuantity}
+            accessibilityRole="button"
+            accessibilityLabel="Increment quantity"
+          >
+            <ThemedView type="backgroundSelected" style={styles.stepper}>
+              <ThemedText type="subtitle">+</ThemedText>
+            </ThemedView>
+          </Pressable>
+        }
       />
 
       <ThemedText type="small" themeColor="textSecondary">
@@ -142,4 +161,11 @@ export function TransactionForm({
 const styles = StyleSheet.create({
   dateBox: { padding: Spacing.three, borderRadius: Spacing.two },
   error: { color: "#e5484d" },
+  stepper: {
+    width: 48,
+    height: 48,
+    borderRadius: Spacing.two,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
