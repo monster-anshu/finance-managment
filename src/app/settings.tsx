@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, StyleSheet, View } from "react-native";
 
 import { Card } from "@/components/card";
+import { InstallAppCard } from "@/components/install-app-card";
 import { notify } from "@/components/notify";
 import { Screen } from "@/components/screen";
 import { ThemedText } from "@/components/themed-text";
@@ -48,6 +49,8 @@ export default function SettingsScreen() {
 
   return (
     <Screen>
+      <InstallAppCard />
+
       <Card>
         <ThemedText type="smallBold">Backup / Export</ThemedText>
         <ThemedText type="small" themeColor="textSecondary">
