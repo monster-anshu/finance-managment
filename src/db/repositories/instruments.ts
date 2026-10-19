@@ -43,12 +43,15 @@ export async function updateInstrument(
     .set({ ...input, updatedAt: Date.now() })
     .where(eq(instruments.id, id))
     .returning();
+  if (!row) throw new Error(`Instrument ${id} not found`);
   return row;
 }
 
 export async function deleteInstrument(id: number): Promise<void> {
-  await db.transaction(async (tx) => {
-    await tx.delete(transactions).where(eq(transactions.instrumentId, id));
-    await tx.delete(instruments).where(eq(instruments.id, id));
+  // expo-sqlite's Drizzle driver is sync: an async callback would commit at
+  // its first `await`, so statements run synchronously via `.run()`.
+  db.transaction((tx) => {
+    tx.delete(transactions).where(eq(transactions.instrumentId, id)).run();
+    tx.delete(instruments).where(eq(instruments.id, id)).run();
   });
 }

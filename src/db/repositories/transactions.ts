@@ -18,7 +18,7 @@ export function listTransactionsByInstrument(
     .select()
     .from(transactions)
     .where(eq(transactions.instrumentId, instrumentId))
-    .orderBy(desc(transactions.date));
+    .orderBy(desc(transactions.date), desc(transactions.id));
 }
 
 export async function getTransaction(
@@ -52,6 +52,7 @@ export async function updateTransaction(
     .set({ ...input, updatedAt: Date.now() })
     .where(eq(transactions.id, id))
     .returning();
+  if (!row) throw new Error(`Transaction ${id} not found`);
   return row;
 }
 

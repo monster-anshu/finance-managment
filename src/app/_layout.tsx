@@ -5,6 +5,7 @@ import { useColorScheme } from "react-native";
 
 import { AnimatedSplashOverlay } from "@/components/animated-icon";
 import { MigrationGate } from "@/components/migration-gate";
+import { stackScreenOptions } from "@/components/stack-screen-options";
 import { queryClient } from "@/lib/query";
 
 SplashScreen.preventAutoHideAsync();
@@ -16,7 +17,7 @@ export default function RootLayout() {
       <QueryClientProvider client={queryClient}>
         <MigrationGate>
           <AnimatedSplashOverlay />
-          <Stack>
+          <Stack screenOptions={stackScreenOptions}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen
               name="instrument/[id]"

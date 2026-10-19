@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Alert, Button, StyleSheet, View } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 
 import { Card } from "@/components/card";
+import { notify } from "@/components/notify";
 import { Screen } from "@/components/screen";
 import { ThemedText } from "@/components/themed-text";
 import { Spacing } from "@/constants/theme";
@@ -16,7 +17,7 @@ export default function SettingsScreen() {
       setBusy(true);
       await action();
     } catch (error) {
-      Alert.alert(
+      notify(
         "Export failed",
         error instanceof Error ? error.message : "Unknown error"
       );
@@ -31,12 +32,12 @@ export default function SettingsScreen() {
       const result = await importBackup();
       if (!result) return; // user cancelled the picker
       await queryClient.invalidateQueries();
-      Alert.alert(
+      notify(
         "Import complete",
         `Added ${result.instruments} instruments and ${result.transactions} buys.`
       );
     } catch (error) {
-      Alert.alert(
+      notify(
         "Import failed",
         error instanceof Error ? error.message : "Unknown error"
       );

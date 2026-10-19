@@ -1,10 +1,11 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 
 import { useCreateTransaction } from "@/features/transactions/hooks";
 import {
   TransactionForm,
   type TransactionFormValues,
 } from "@/features/transactions/transaction-form";
+import { goBack } from "@/lib/navigation";
 
 export default function NewTransactionScreen() {
   const { instrumentId } = useLocalSearchParams<{ instrumentId: string }>();
@@ -12,7 +13,10 @@ export default function NewTransactionScreen() {
   const { mutate, isPending } = useCreateTransaction();
 
   function handleSubmit(values: TransactionFormValues) {
-    mutate({ ...values, instrumentId: id }, { onSuccess: () => router.back() });
+    mutate(
+      { ...values, instrumentId: id },
+      { onSuccess: () => goBack(`/instrument/${id}`) }
+    );
   }
 
   return (
