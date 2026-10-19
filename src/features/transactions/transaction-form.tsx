@@ -1,14 +1,13 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { useState } from "react";
-import { Button, Platform, Pressable, StyleSheet } from "react-native";
+import { Button, Pressable, StyleSheet } from "react-native";
 
+import { DateField } from "@/components/date-field";
 import { LabeledField } from "@/components/labeled-field";
 import { OptionPicker } from "@/components/option-picker";
 import { Screen } from "@/components/screen";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Spacing } from "@/constants/theme";
-import { formatDate } from "@/lib/format";
 import { TX_KINDS, TX_KIND_LABELS, type TxKind } from "@/lib/types";
 import {
   isValid,
@@ -54,7 +53,6 @@ export function TransactionForm({
       }
   );
   const [errors, setErrors] = useState<Errors<TransactionInput>>({});
-  const [showPicker, setShowPicker] = useState(false);
 
   function incrementQuantity() {
     setInput((s) => {
@@ -116,31 +114,12 @@ export function TransactionForm({
         }
       />
 
-      <ThemedText type="small" themeColor="textSecondary">
-        Date
-      </ThemedText>
-      <Pressable onPress={() => setShowPicker(true)}>
-        <ThemedView type="backgroundElement" style={styles.dateBox}>
-          <ThemedText type="small">
-            {input.date != null ? formatDate(input.date) : "Select date"}
-          </ThemedText>
-        </ThemedView>
-      </Pressable>
-      {errors.date ? (
-        <ThemedText type="small" style={styles.error}>
-          {errors.date}
-        </ThemedText>
-      ) : null}
-      {showPicker ? (
-        <DateTimePicker
-          value={input.date != null ? new Date(input.date) : new Date()}
-          mode="date"
-          onChange={(_event, selected) => {
-            if (Platform.OS !== "ios") setShowPicker(false);
-            if (selected) setInput((s) => ({ ...s, date: selected.getTime() }));
-          }}
-        />
-      ) : null}
+      <DateField
+        label="Date"
+        value={input.date}
+        onChange={(date) => setInput((s) => ({ ...s, date }))}
+        error={errors.date}
+      />
 
       <LabeledField
         label="Note (optional)"
@@ -159,8 +138,6 @@ export function TransactionForm({
 }
 
 const styles = StyleSheet.create({
-  dateBox: { padding: Spacing.three, borderRadius: Spacing.two },
-  error: { color: "#e5484d" },
   stepper: {
     width: 48,
     height: 48,

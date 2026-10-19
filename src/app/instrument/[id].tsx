@@ -24,6 +24,7 @@ import {
 } from "@/features/transactions/hooks";
 import { summarizeTransactions } from "@/lib/aggregation";
 import { formatDate, formatINR, formatQuantity } from "@/lib/format";
+import { goBack } from "@/lib/navigation";
 import { ASSET_TYPE_LABELS, TX_KIND_LABELS } from "@/lib/types";
 
 export default function InstrumentDetailScreen() {
@@ -51,7 +52,7 @@ export default function InstrumentDetailScreen() {
       "Deleting this instrument also deletes all its buys. This cannot be undone.",
       () =>
         deleteInstrument.mutate(instrumentId, {
-          onSuccess: () => router.back(),
+          onSuccess: () => goBack("/portfolio"),
         })
     );
   }

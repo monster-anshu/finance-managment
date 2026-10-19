@@ -21,8 +21,12 @@
       "package": "com.monster2312.financemanagment"
     },
     "web": {
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "output": "single",
+      "favicon": "./assets/images/favicon.png",
+      "name": "Finance Manager",
+      "shortName": "Finance",
+      "themeColor": "#208AEF",
+      "backgroundColor": "#ffffff"
     },
     "plugins": [
       "expo-router",

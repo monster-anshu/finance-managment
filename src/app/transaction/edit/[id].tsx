@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { ActivityIndicator } from "react-native";
 
 import { Screen } from "@/components/screen";
@@ -10,6 +10,7 @@ import {
   TransactionForm,
   type TransactionFormValues,
 } from "@/features/transactions/transaction-form";
+import { goBack } from "@/lib/navigation";
 
 export default function EditTransactionScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -25,10 +26,12 @@ export default function EditTransactionScreen() {
     );
   }
 
+  const { instrumentId } = transaction;
+
   function handleSubmit(values: TransactionFormValues) {
     mutate(
       { id: transactionId, input: values },
-      { onSuccess: () => router.back() }
+      { onSuccess: () => goBack(`/instrument/${instrumentId}`) }
     );
   }
 
